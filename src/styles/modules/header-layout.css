@@ -1,0 +1,521 @@
+﻿/* =========================
+   APP CONTAINER
+========================= */
+
+.app-container {
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;        /* USA height, no min-height */
+  max-height: 100vh;
+  max-height: 100dvh;    /*  LIMITA la altura máxima */
+  background: var(--bg-main);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;       /*  Oculta overflow del contenedor principal */
+  padding-top: env(safe-area-inset-top);
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.header {
+  min-height: clamp(60px, 15vw, 74px);
+  height: auto;
+  background: #4557bc;
+  color: #faf8f8;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 
+    clamp(8px, 2vw, 12px) 
+    clamp(12px, 3vw, 20px);
+  box-shadow: 0 2px 8px rgba(6, 18, 252, 0.35);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  gap: clamp(6px, 1.5vw, 10px);
+  /* Asegurar que esté por encima del contenido con notch */
+  padding-top: calc(clamp(8px, 2vw, 12px) + env(safe-area-inset-top));
+}
+
+.header-start {
+  display: flex;
+  align-items: center;
+  gap: clamp(6px, 1.5vw, 8px);
+  min-width: 0;
+  flex-shrink: 0;
+}
+
+.header-center {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0 clamp(6px, 2vw, 10px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(2px, 0.5vw, 3px);
+  text-align: center;
+}
+
+.header-user-name {
+  max-width: 100%;
+  color: #fff;
+  font-size: clamp(14px, 3.8vw, 17px);
+  font-style: italic;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+}
+
+.active-operation-title {
+  max-width: 100%;
+  color: #fff;
+  font-size: clamp(9px, 2.2vw, 11px);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  opacity: 0.85;
+  line-height: 1.2;
+}
+
+/* =========================
+   HEADER BUTTONS - BASE
+========================= */
+
+.menu-icon,
+.plus-icon,
+.install-icon-btn {
+  background: rgba(26, 26, 113, 0.21);
+  border: none;
+  color: #fff;
+  /* Tamaño táctil mínimo de 44px */
+  width: clamp(40px, 10vw, 44px);
+  height: clamp(40px, 10vw, 44px);
+  min-width: 40px;
+  min-height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 
+    background 0.2s ease,
+    transform 0.15s ease;
+  flex-shrink: 0;
+  /* Mejorar experiencia táctil */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* Iconos dentro de botones circulares */
+.plus-icon img,
+.install-icon-btn img,
+.menu-icon img,
+.close-btn img,
+.section-add-btn img,
+.action-btn img {
+  display: block;
+  width: clamp(18px, 4.5vw, 22px);
+  height: clamp(18px, 4.5vw, 22px);
+  object-fit: contain;
+  pointer-events: none;
+  /* Eliminar crisp-edges que pixeliza en pantallas retina */
+  image-rendering: auto;
+  filter: brightness(1.12) contrast(1.18) saturate(1.08);
+}
+
+.header-plus-icon {
+  width: clamp(20px, 5vw, 22px);
+  height: clamp(20px, 5vw, 22px);
+}
+
+.menu-toggle-icon {
+  width: clamp(20px, 5vw, 22px);
+  height: clamp(20px, 5vw, 22px);
+}
+
+/* =========================
+   HEADER ACTIONS (sync + plus)
+========================= */
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: clamp(6px, 1.5vw, 8px);
+  flex-shrink: 0;
+}
+
+/* =========================
+   SYNC BUTTON
+========================= */
+
+.sync-icon-btn {
+  position: relative;
+  background: rgba(26, 26, 113, 0.21);
+  border: none;
+  color: #fff;
+  /* Tamaño táctil mínimo */
+  width: clamp(36px, 9vw, 40px);
+  height: clamp(36px, 9vw, 40px);
+  min-width: 36px;
+  min-height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  flex: 0 0 auto;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.sync-icon {
+  width: clamp(18px, 4.5vw, 20px);
+  height: clamp(18px, 4.5vw, 20px);
+  display: block;
+  object-fit: contain;
+  transform-origin: center;
+  image-rendering: auto;
+  filter: brightness(1.08) contrast(1.15) saturate(1.05);
+}
+
+.install-icon {
+  width: clamp(18px, 4.5vw, 20px);
+  height: clamp(18px, 4.5vw, 20px);
+}
+
+/* =========================
+   HOVER & ACTIVE STATES
+========================= */
+
+/* Estados hover (solo dispositivos con cursor fino) */
+@media (hover: hover) {
+  .menu-icon:hover,
+  .plus-icon:hover,
+  .install-icon-btn:hover,
+  .sync-icon-btn:hover {
+    background: rgba(255, 255, 255, 0.28);
+    transform: scale(1.05);
+  }
+}
+
+/* Estados active (todos los dispositivos) */
+.menu-icon:active,
+.plus-icon:active,
+.install-icon-btn:active,
+.sync-icon-btn:active {
+  background: rgba(255, 255, 255, 0.35);
+  transform: scale(0.95);
+}
+
+/* Botón deshabilitado */
+.sync-icon-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+/* =========================
+   SYNC ANIMATION
+========================= */
+
+.sync-icon-btn.is-syncing .sync-icon {
+  animation: syncSpin 0.7s ease-in-out;
+}
+
+@keyframes syncSpin {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  60% {
+    transform: rotate(180deg) scale(1.08);
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+  }
+}
+
+/* Reducir animación si el usuario lo prefiere */
+@media (prefers-reduced-motion: reduce) {
+  .sync-icon-btn.is-syncing .sync-icon {
+    animation: none;
+    opacity: 0.6;
+  }
+}
+
+/* =========================
+   LOGOUT BUTTON
+========================= */
+
+.logout-btn {
+  border: 1px solid #f60b0b;
+  background: #f2f0f0;
+  color: #d10404;
+  border-radius: clamp(10px, 2.5vw, 12px);
+  padding: clamp(8px, 2vw, 10px) clamp(10px, 2.5vw, 12px);
+  font-size: clamp(11px, 2.8vw, 13px);
+  font-weight: 700;
+  cursor: pointer;
+  min-height: 40px;
+  min-width: 44px;
+  white-space: nowrap;
+  transition:
+    background 0.2s ease,
+    transform 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.logout-btn:hover {
+  background: #ffe7e7;
+}
+
+.logout-btn:active {
+  background: #ffd4d4;
+  transform: scale(0.97);
+}
+
+/* =========================
+   CONTENT SCROLL
+========================= */
+
+.content-scroll {
+  flex: 1 1 auto;         /* Añade flex-basis: auto */
+  min-height: 0;           /* CRÍTICO: permite que flex: 1 funcione */
+  padding: clamp(12px, 3vw, 16px);
+  overflow-y: auto;
+  overflow-x: clip;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+.workspace-view {
+  width: 100%;
+  min-width: 0;
+  /*NO usar height: 100% aquí, dejar que el contenido dicte la altura */
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* =========================
+   ADD SECTION BUTTON (CORREGIDO)
+========================= */
+
+.action-btn.add-section-btn {
+  position: relative;
+  overflow: hidden;
+  width: auto;
+  height: auto;
+  min-height: clamp(38px, 9vw, 42px);
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(4px, 1vw, 6px);
+  padding: 0 clamp(14px, 3.5vw, 16px);
+  font-size: clamp(11px, 2.8vw, 13px);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: clamp(16px, 4vw, 20px);
+  background: linear-gradient(
+    135deg,
+    #5b6df5 0%,
+    #2f48d3 45%,
+    #2f48d3 100%
+  );
+  color: #ffffff;
+  box-shadow:
+    0 4px 12px rgba(79, 70, 229, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  user-select: none;
+}
+
+/* Brillo superior sutil */
+.action-btn.add-section-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.15),
+    rgba(255, 255, 255, 0)
+  );
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+/* Hover */
+.action-btn.add-section-btn:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 6px 16px rgba(79, 70, 229, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+  background: linear-gradient(
+    135deg,
+    #6478f8 0%,
+    #3a55e0 45%,
+    #3a55e0 100%
+  );
+}
+
+/* Active */
+.action-btn.add-section-btn:active {
+  transform: scale(0.97);
+  box-shadow:
+    0 2px 6px rgba(79, 70, 229, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+/* Focus visible */
+.action-btn.add-section-btn:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 3px rgba(99, 102, 241, 0.4),
+    0 4px 12px rgba(79, 70, 229, 0.25);
+}
+
+/* Icono dentro del botón */
+.action-btn.add-section-btn i,
+.action-btn.add-section-btn svg {
+  font-size: clamp(14px, 3.5vw, 16px);
+  opacity: 0.95;
+  flex-shrink: 0;
+}
+
+/* Texto del botón */
+.action-btn.add-section-btn span {
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.add-section-icon {
+  width: clamp(16px, 4vw, 18px);
+  height: clamp(16px, 4vw, 18px);
+  flex: 0 0 auto;
+}
+
+/* =========================
+   SIZE SECTION
+========================= */
+
+.size-section {
+  margin-bottom: clamp(8px, 2vw, 10px);
+}
+
+/* =========================
+   MEDIA QUERIES
+========================= */
+
+/* Móviles */
+@media (max-width: 640px) {
+  .header {
+    min-height: clamp(56px, 14vw, 64px);
+    padding: clamp(6px, 1.5vw, 10px) clamp(8px, 2vw, 14px);
+    padding-top: calc(clamp(6px, 1.5vw, 10px) + env(safe-area-inset-top));
+  }
+
+  .header-user-name {
+    font-size: clamp(13px, 3.5vw, 15px);
+  }
+
+  .active-operation-title {
+    font-size: clamp(8px, 2vw, 10px);
+  }
+
+  .header-center {
+    margin: 0 clamp(4px, 1.5vw, 8px);
+  }
+
+  .header-actions {
+    gap: clamp(4px, 1vw, 6px);
+  }
+
+  .logout-btn {
+    font-size: clamp(10px, 2.5vw, 12px);
+    padding: clamp(6px, 1.5vw, 8px) clamp(8px, 2vw, 10px);
+  }
+}
+
+/* Móviles muy pequeños */
+@media (max-width: 380px) {
+  .header {
+    min-height: clamp(52px, 13vw, 58px);
+    padding: clamp(4px, 1.2vw, 8px) clamp(6px, 1.5vw, 10px);
+    padding-top: calc(clamp(4px, 1.2vw, 8px) + env(safe-area-inset-top));
+  }
+
+  .menu-icon,
+  .plus-icon,
+  .install-icon-btn {
+    width: clamp(36px, 9vw, 40px);
+    height: clamp(36px, 9vw, 40px);
+    min-width: 36px;
+    min-height: 36px;
+  }
+
+  .sync-icon-btn {
+    width: clamp(32px, 8vw, 36px);
+    height: clamp(32px, 8vw, 36px);
+    min-width: 32px;
+    min-height: 32px;
+  }
+
+  .header-user-name {
+    font-size: clamp(12px, 3.2vw, 14px);
+  }
+
+  .active-operation-title {
+    display: none; /* Ocultar en pantallas muy pequeñas */
+  }
+
+  .header-center {
+    gap: 1px;
+  }
+
+  .action-btn.add-section-btn {
+    min-height: clamp(34px, 8vw, 38px);
+    padding: 0 clamp(10px, 2.5vw, 12px);
+    font-size: clamp(10px, 2.5vw, 11px);
+  }
+}
+
+/* Modo landscape */
+@media (max-width: 850px) and (max-height: 500px) {
+  .header {
+    min-height: clamp(48px, 12vw, 56px);
+    padding: clamp(4px, 1vw, 6px) clamp(8px, 2vw, 12px);
+    padding-top: calc(clamp(4px, 1vw, 6px) + env(safe-area-inset-top));
+  }
+
+  .header-center {
+    flex-direction: row;
+    gap: 6px;
+  }
+
+  .active-operation-title {
+    display: inline;
+  }
+
+  .content-scroll {
+    padding: clamp(8px, 2vw, 12px);
+  }
+}

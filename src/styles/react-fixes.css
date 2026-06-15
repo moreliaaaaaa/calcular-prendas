@@ -1,0 +1,41 @@
+.operation-item[hidden],
+.operation-name-input[hidden] {
+  display: none;
+}
+
+.app-container {
+  min-height: 100vh;
+}
+
+.editable-label,
+.editable-title {
+  cursor: text;
+}
+
+.sync-icon-btn[data-sync-state="pending"] {
+  opacity: 0.75;
+}
+
+.sync-icon-btn[data-sync-state="error"] {
+  outline: 2px solid #d93025;
+}
+
+.toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  z-index: 2000;
+  transform: translateX(-50%);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  color: #fff;
+  padding: 12px 24px;
+}
+
+.toast-success {
+  background: #4caf50;
+}
+
+.toast-error {
+  background: #0919f0;
+}

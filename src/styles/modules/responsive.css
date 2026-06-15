@@ -1,0 +1,640 @@
+﻿/* =========================
+   UTILIDADES DE ACCESIBILIDAD
+========================= */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* =========================
+   MOBILE - TABLET PEQUEÑA
+   (≤768px)
+========================= */
+
+@media (max-width: 768px) {
+  /* ---------- HEADER ---------- */
+  
+  .header {
+    min-height: clamp(56px, 14vw, 68px);
+    height: auto;
+    padding: 
+      clamp(6px, 1.5vw, 10px) 
+      clamp(8px, 2vw, 10px);
+    padding-top: calc(clamp(6px, 1.5vw, 10px) + env(safe-area-inset-top));
+  }
+
+  .header-start {
+    gap: clamp(4px, 1vw, 6px);
+  }
+
+  .header-center {
+    margin: 0 clamp(4px, 1vw, 6px);
+    gap: clamp(1px, 0.3vw, 2px);
+  }
+
+  .header-user-name {
+    font-size: clamp(12px, 3.2vw, 14px);
+  }
+
+  .active-operation-title {
+    font-size: clamp(8px, 2vw, 10px);
+    letter-spacing: 0.03em;
+  }
+
+  /* Botones del header - área táctil mínima */
+  .menu-icon,
+  .plus-icon,
+  .sync-icon-btn,
+  .install-icon-btn {
+    width: clamp(36px, 9vw, 40px);
+    height: clamp(36px, 9vw, 40px);
+    min-width: 36px;
+    min-height: 36px;
+  }
+
+  .header-actions {
+    gap: clamp(4px, 1vw, 6px);
+  }
+
+  .logout-btn {
+    padding: clamp(7px, 1.8vw, 9px) clamp(8px, 2vw, 10px);
+    font-size: clamp(10px, 2.5vw, 12px);
+    min-height: 36px;
+  }
+
+  /* ---------- CONTENT SCROLL ---------- */
+  
+  .content-scroll {
+    padding: clamp(8px, 2vw, 10px);
+    padding-bottom: calc(clamp(8px, 2vw, 10px) + env(safe-area-inset-bottom));
+  }
+
+  /* ---------- ADD SECTION BUTTON ---------- */
+  
+  .action-btn.add-section-btn {
+    min-height: clamp(36px, 9vw, 40px);
+    height: auto;
+    padding: 0 clamp(12px, 3vw, 14px);
+    font-size: clamp(11px, 2.8vw, 12px);
+    border-radius: clamp(16px, 4vw, 20px);
+  }
+
+  .add-section-icon {
+    width: clamp(16px, 4vw, 18px);
+    height: clamp(16px, 4vw, 18px);
+  }
+
+  /* ---------- SECTION BUTTONS ---------- */
+  
+  .section-delete-btn,
+  .section-add-btn {
+    width: clamp(32px, 8vw, 36px);
+    height: clamp(32px, 8vw, 36px);
+    min-width: 32px;
+    min-height: 32px;
+  }
+
+  .section-delete-btn {
+    left: clamp(4px, 1vw, 6px);
+  }
+
+  .section-add-btn {
+    right: clamp(4px, 1vw, 6px);
+  }
+
+  /* ---------- BLUE BORDER BOX ---------- */
+  
+  .blue-border-box {
+    width: 100%;
+    min-height: clamp(36px, 9vw, 40px);
+    margin: clamp(6px, 1.5vw, 8px) 0 clamp(3px, 0.8vw, 4px);
+    font-size: clamp(12px, 3vw, 14px);
+    padding: clamp(8px, 2vw, 10px);
+  }
+
+  /* ---------- EDITABLE TITLE ---------- */
+  
+  .editable-title {
+    min-height: clamp(32px, 8vw, 36px);
+    padding: 0 clamp(60px, 16vw, 72px);
+    letter-spacing: 0.06em;
+    font-size: clamp(13px, 3.2vw, 15px);
+  }
+
+  /* ---------- TABLES ---------- */
+  
+  table {
+    font-size: clamp(10px, 2.5vw, 12px);
+    border-spacing: 0 1px;
+  }
+
+  th {
+    padding: clamp(4px, 1vw, 6px) clamp(2px, 0.5vw, 4px);
+    font-size: clamp(8px, 2vw, 10px);
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+  }
+
+  td {
+    padding: clamp(3px, 0.8vw, 4px) clamp(2px, 0.5vw, 3px);
+  }
+
+  th:last-child,
+  td:last-child {
+    width: clamp(40px, 10vw, 48px);
+  }
+
+  /* ---------- INPUTS ---------- */
+  
+  .cell-input,
+  .size-input {
+    padding: clamp(4px, 1vw, 6px) clamp(6px, 1.5vw, 8px);
+    font-size: clamp(13px, 3.2vw, 14px);
+    font-weight: 600;
+    min-height: clamp(32px, 8vw, 36px);
+    border-radius: clamp(6px, 1.5vw, 8px);
+    width: 100%;
+  }
+
+  /* ---------- DELETE BUTTON ---------- */
+  
+  .delete-btn {
+    width: clamp(32px, 8vw, 36px);
+    height: clamp(32px, 8vw, 36px);
+    min-width: 32px;
+    min-height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .delete-btn img,
+  .delete-btn svg {
+    width: clamp(12px, 3vw, 14px);
+    height: clamp(12px, 3vw, 14px);
+  }
+
+  /* ---------- ACTION BUTTON ---------- */
+  
+  .action-btn {
+    width: 100%;
+    margin: clamp(4px, 1vw, 6px) 0 0;
+    padding: clamp(8px, 2vw, 10px) clamp(10px, 2.5vw, 12px);
+    font-size: clamp(11px, 2.8vw, 13px);
+    min-height: 44px;
+  }
+
+  /* ---------- TOTALS ---------- */
+  
+  .totals-row {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: clamp(5px, 1.2vw, 6px);
+    margin: clamp(6px, 1.5vw, 8px) 0 clamp(10px, 2.5vw, 12px);
+  }
+
+  .green-box {
+    flex: 1 1 calc(50% - 6px);
+    min-width: 120px;
+    min-height: clamp(40px, 10vw, 44px);
+    padding: clamp(7px, 1.8vw, 8px) clamp(8px, 2vw, 10px);
+    font-size: clamp(11px, 2.8vw, 13px);
+    border-radius: clamp(8px, 2vw, 10px);
+  }
+
+  .green-box span:first-child {
+    font-size: 0.94em;
+  }
+
+  .green-box span:last-child {
+    font-size: clamp(13px, 3.2vw, 15px);
+  }
+
+  /* ---------- GRAND TOTAL ---------- */
+  
+  .grand-total-row {
+    gap: clamp(6px, 1.5vw, 8px);
+    padding: clamp(6px, 1.5vw, 8px);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .grand-total-row .green-box {
+    width: 100%;
+    padding: clamp(7px, 1.8vw, 9px) clamp(8px, 2vw, 10px);
+  }
+
+  .summary-title {
+    font-size: clamp(13px, 3.2vw, 15px);
+    margin-bottom: 0;
+  }
+
+  /* ---------- FABRIC ---------- */
+  
+  .fabric-grand-total-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(4px, 1vw, 6px);
+  }
+
+  .fabric-purchase-section {
+    margin: clamp(8px, 2vw, 10px) 0 clamp(6px, 1.5vw, 8px);
+  }
+
+  .fabric-total-row {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: clamp(5px, 1.2vw, 6px);
+  }
+
+  /* ---------- SIDE MENU ---------- */
+  
+  .side-menu {
+    width: min(360px, 88vw);
+  }
+
+  .menu-header {
+    padding: clamp(12px, 3vw, 16px);
+  }
+
+  .menu-logo {
+    width: clamp(34px, 8.5vw, 38px);
+    height: auto;
+    max-height: clamp(30px, 7.5vw, 34px);
+    flex: 0 0 auto;
+    margin-right: -3px;
+  }
+
+  .menu-brand-name {
+    font-size: clamp(11px, 2.8vw, 13px);
+    letter-spacing: 0.1em;
+    margin-left: clamp(2px, 0.5vw, 3px);
+  }
+
+  .operations-container {
+    padding: clamp(6px, 1.5vw, 8px) clamp(10px, 2.5vw, 12px);
+  }
+
+  .deleted-operations-section {
+    padding: clamp(8px, 2vw, 10px) clamp(10px, 2.5vw, 12px) clamp(5px, 1.2vw, 6px);
+  }
+
+  .deleted-operations-title {
+    margin-bottom: clamp(6px, 1.5vw, 8px);
+    font-size: clamp(10px, 2.5vw, 11px);
+  }
+
+  .operation-row {
+    gap: clamp(5px, 1.2vw, 6px);
+    margin-bottom: clamp(6px, 1.5vw, 7px);
+  }
+
+  .operation-item,
+  .operation-name-input {
+    padding: clamp(8px, 2vw, 10px) clamp(10px, 2.5vw, 11px);
+    font-size: clamp(12px, 3vw, 13px);
+    border-radius: clamp(7px, 1.8vw, 8px);
+    min-height: 40px;
+  }
+
+  .deleted-operation-row {
+    gap: clamp(5px, 1.2vw, 6px);
+    padding: clamp(6px, 1.5vw, 8px) clamp(8px, 2vw, 10px);
+    border-radius: clamp(7px, 1.8vw, 8px);
+    min-height: 40px;
+  }
+
+  .deleted-operation-name {
+    font-size: clamp(11px, 2.8vw, 13px);
+  }
+
+  .deleted-operation-actions {
+    gap: clamp(5px, 1.2vw, 6px);
+  }
+
+  .op-action {
+    width: clamp(32px, 8vw, 36px);
+    height: clamp(32px, 8vw, 36px);
+    min-width: 32px;
+    min-height: 32px;
+    border-radius: clamp(7px, 1.8vw, 8px);
+  }
+
+  .op-action img,
+  .op-action svg {
+    width: clamp(14px, 3.5vw, 15px);
+    height: clamp(14px, 3.5vw, 15px);
+  }
+
+  /* ---------- ADMIN PANEL ---------- */
+  
+  .admin-panel-item {
+    grid-template-columns: 1fr;
+    gap: clamp(6px, 1.5vw, 8px);
+  }
+
+  .admin-panel-seen,
+  .admin-panel-updated {
+    text-align: left;
+    white-space: normal;
+  }
+
+  .admin-panel-rank {
+    width: clamp(26px, 6.5vw, 28px);
+    height: clamp(26px, 6.5vw, 28px);
+    min-width: 26px;
+  }
+
+  /* ---------- AUTH SCREEN ---------- */
+  
+  .auth-screen {
+    padding: clamp(8px, 2vw, 10px);
+    align-items: flex-start;
+  }
+
+  .auth-card {
+    width: min(100%, 420px);
+    padding: clamp(16px, 4vw, 20px) clamp(14px, 3.5vw, 16px);
+    border-radius: clamp(16px, 4vw, 20px);
+    max-height: calc(100dvh - 20px);
+    overflow-y: auto;
+  }
+
+  .auth-card h2 {
+    font-size: clamp(18px, 4.5vw, 22px);
+    line-height: 1.1;
+  }
+
+  .auth-brand {
+    gap: clamp(5px, 1.2vw, 6px);
+    margin-bottom: clamp(14px, 3.5vw, 16px);
+  }
+
+  .auth-logo {
+    width: clamp(28px, 7vw, 32px);
+    height: auto;
+    max-height: clamp(24px, 6vw, 28px);
+  }
+
+  .auth-brand-name {
+    font-size: clamp(10px, 2.5vw, 11px);
+    letter-spacing: 0.08em;
+    margin-left: clamp(2px, 0.5vw, 3px);
+  }
+
+  .auth-eyebrow {
+    font-size: clamp(9px, 2.2vw, 10px);
+    letter-spacing: 0.12em;
+    margin-bottom: clamp(3px, 0.8vw, 4px);
+  }
+
+  .auth-copy {
+    font-size: clamp(12px, 3vw, 13px);
+    line-height: 1.55;
+    margin-bottom: clamp(14px, 3.5vw, 16px);
+  }
+
+  .auth-form {
+    gap: clamp(10px, 2.5vw, 12px);
+  }
+
+  .auth-field {
+    gap: clamp(5px, 1.2vw, 6px);
+    font-size: clamp(12px, 3vw, 13px);
+  }
+
+  .auth-field input {
+    padding: clamp(11px, 2.8vw, 13px) clamp(12px, 3vw, 14px);
+    font-size: 16px; /* Evita zoom automático en iOS */
+    border-radius: clamp(10px, 2.5vw, 12px);
+    min-height: 44px;
+  }
+
+  .password-wrapper input {
+    padding-right: clamp(40px, 10vw, 44px);
+  }
+
+  .toggle-password-btn {
+    right: clamp(8px, 2vw, 10px);
+    font-size: clamp(14px, 3.5vw, 16px);
+    padding: clamp(6px, 1.5vw, 8px);
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .toggle-password-btn img {
+    width: clamp(18px, 4.5vw, 20px);
+    height: clamp(18px, 4.5vw, 20px);
+  }
+
+  .auth-message {
+    min-height: clamp(16px, 4vw, 18px);
+    font-size: clamp(11px, 2.8vw, 12px);
+  }
+
+  .auth-actions {
+    gap: clamp(8px, 2vw, 10px);
+    flex-direction: column;
+  }
+
+  .auth-btn {
+    padding: clamp(11px, 2.8vw, 13px) clamp(14px, 3.5vw, 16px);
+    font-size: clamp(12px, 3vw, 13px);
+    min-height: 44px;
+    width: 100%;
+  }
+
+  .tab-button {
+    font-size: inherit;
+  }
+}
+
+/* =========================
+   MÓVILES PEQUEÑOS
+   (≤480px)
+========================= */
+
+@media (max-width: 480px) {
+  .header {
+    min-height: clamp(52px, 13vw, 60px);
+  }
+
+  .header-user-name {
+    font-size: clamp(11px, 3vw, 13px);
+  }
+
+  .active-operation-title {
+    font-size: clamp(7px, 1.8vw, 9px);
+  }
+
+  .grand-total-row {
+    grid-template-columns: 1fr;
+    gap: clamp(4px, 1vw, 6px);
+  }
+
+  .fabric-grand-total-row {
+    grid-template-columns: 1fr;
+  }
+
+  .green-box {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+
+  .totals-row {
+    flex-direction: column;
+  }
+
+  /* Inputs más grandes para evitar zoom */
+  .cell-input,
+  .size-input {
+    font-size: 16px;
+    min-height: 38px;
+  }
+
+  .side-menu {
+    width: min(300px, 92vw);
+  }
+
+  .op-action {
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+    min-height: 34px;
+  }
+
+  .delete-btn {
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+    min-height: 34px;
+  }
+}
+
+/* =========================
+   MÓVILES MUY PEQUEÑOS
+========================= */
+
+@media (max-width: 360px) {
+  .header {
+    min-height: clamp(48px, 12vw, 54px);
+    padding: clamp(4px, 1vw, 6px) clamp(6px, 1.5vw, 8px);
+    padding-top: calc(clamp(4px, 1vw, 6px) + env(safe-area-inset-top));
+  }
+
+  .header-center {
+    margin: 0 4px;
+    gap: 1px;
+  }
+
+  .active-operation-title {
+    display: none;
+  }
+
+  .menu-icon,
+  .plus-icon,
+  .sync-icon-btn,
+  .install-icon-btn {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    min-height: 32px;
+  }
+
+  .header-actions {
+    gap: 3px;
+  }
+
+  .action-btn.add-section-btn {
+    font-size: 10px;
+    padding: 0 10px;
+    min-height: 34px;
+  }
+
+  .auth-card {
+    padding: 14px 12px;
+    border-radius: 14px;
+  }
+
+  .side-menu {
+    width: 95vw;
+  }
+}
+
+/* =========================
+   MODO LANDSCAPE
+========================= */
+
+@media (max-width: 850px) and (max-height: 500px) {
+  .header {
+    min-height: clamp(44px, 11vw, 52px);
+    padding: clamp(3px, 0.8vw, 5px) clamp(6px, 1.5vw, 8px);
+    padding-top: calc(clamp(3px, 0.8vw, 5px) + env(safe-area-inset-top));
+  }
+
+  .header-center {
+    flex-direction: row;
+    gap: 6px;
+    align-items: center;
+  }
+
+  .active-operation-title {
+    display: inline;
+    font-size: clamp(7px, 1.8vw, 9px);
+  }
+
+  .content-scroll {
+    padding: clamp(6px, 1.5vw, 8px);
+  }
+
+  .auth-screen {
+    padding: 6px;
+  }
+
+  .auth-card {
+    max-height: calc(100dvh - 12px);
+    padding: 12px 14px;
+  }
+
+  .auth-brand {
+    margin-bottom: 10px;
+  }
+
+  .auth-form {
+    gap: 8px;
+  }
+
+  .grand-total-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .fabric-grand-total-row {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* =========================
+   PANTALLAS DE BAJA ALTURA
+========================= */
+
+@media (max-height: 720px) and (min-height: 501px) {
+  .auth-screen {
+    align-items: flex-start;
+  }
+
+  .auth-card {
+    padding-top: clamp(14px, 3.5vw, 18px);
+    padding-bottom: clamp(14px, 3.5vw, 18px);
+  }
+
+  .auth-brand {
+    margin-bottom: clamp(12px, 3vw, 16px);
+  }
+}
+

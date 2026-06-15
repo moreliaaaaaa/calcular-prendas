@@ -1,0 +1,588 @@
+﻿/* =========================
+   DARK MODE - BASE
+========================= */
+
+/* Transición suave entre temas */
+body {
+  transition: 
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+body.dark-mode {
+  background: #0c1220;
+  color: #e7ecff;
+  /* Informar al navegador sobre el esquema de color */
+  color-scheme: dark;
+}
+
+/* Transición suave para todos los elementos al cambiar de tema */
+body.dark-mode *,
+body.dark-mode *::before,
+body.dark-mode *::after {
+  transition: 
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    color 0.2s ease,
+    box-shadow 0.25s ease;
+}
+
+/* Excluir elementos que no deben tener transición */
+body.dark-mode .no-theme-transition,
+body.dark-mode .no-theme-transition * {
+  transition: none !important;
+}
+
+body.dark-mode .app-container {
+  background:
+    radial-gradient(circle at top, rgba(67, 91, 185, 0.2), transparent 28%),
+    #0f1629;
+}
+
+/* =========================
+   AUTH SCREEN - DARK
+========================= */
+
+body.dark-mode .auth-screen {
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(71, 96, 204, 0.22),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 90% 20%,
+      rgba(92, 131, 245, 0.16),
+      transparent 18%
+    ),
+    linear-gradient(180deg, #0c1327 0%, #121d36 100%);
+}
+
+body.dark-mode .auth-card {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(19, 30, 58, 0.98),
+      rgba(12, 20, 40, 0.98)
+    );
+  border-color: rgba(105, 126, 237, 0.24);
+  box-shadow:
+    0 28px 70px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+/* Optimizar sombras en móviles */
+@media (max-width: 768px) {
+  body.dark-mode .auth-card {
+    box-shadow:
+      0 16px 40px rgba(0, 0, 0, 0.35),
+      inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  }
+}
+
+/* =========================
+   TIPOGRAFÍA - DARK
+========================= */
+
+body.dark-mode .auth-card h2,
+body.dark-mode .auth-field,
+body.dark-mode .settings-layer-title,
+body.dark-mode .summary-title,
+body.dark-mode .deleted-operation-name,
+body.dark-mode .operation-item,
+body.dark-mode .operation-name-input,
+body.dark-mode .account-email-text {
+  color: #edf2ff;
+}
+
+body.dark-mode .auth-copy,
+body.dark-mode .auth-message,
+body.dark-mode .deleted-operations-title,
+body.dark-mode .account-panel-title,
+body.dark-mode .settings-item-label,
+body.dark-mode .settings-card-copy,
+body.dark-mode .settings-card-title,
+body.dark-mode .settings-item-value,
+body.dark-mode .deleted-empty {
+  color: #b2c0e1;
+}
+
+/* =========================
+   INPUTS - DARK
+========================= */
+
+body.dark-mode .auth-field input,
+body.dark-mode .cell-input,
+body.dark-mode .size-input,
+body.dark-mode .operation-name-input {
+  background: #0f1730;
+  color: #edf2ff;
+  border-color: rgba(77, 101, 206, 0.38);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.25);
+  caret-color: #8ea4ff;
+}
+
+/* Hover unificado para inputs */
+body.dark-mode .auth-field input:hover,
+body.dark-mode .cell-input:hover,
+body.dark-mode .size-input:hover,
+body.dark-mode .operation-name-input:hover {
+  border-color: rgba(120, 145, 255, 0.55);
+}
+
+/* Focus unificado */
+body.dark-mode .auth-field input:focus-visible,
+body.dark-mode .cell-input:focus-visible,
+body.dark-mode .size-input:focus-visible,
+body.dark-mode .operation-name-input:focus-visible {
+  border-color: rgba(120, 145, 255, 0.7);
+  box-shadow: 0 0 0 4px rgba(79, 100, 216, 0.18);
+  background: #111b38;
+}
+
+/* Placeholders unificados */
+body.dark-mode input::placeholder,
+body.dark-mode textarea::placeholder {
+  color: #7f93c7;
+  opacity: 0.7;
+}
+
+/* Inputs en iOS - evitar estilos nativos que no combinen */
+body.dark-mode input {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* =========================
+   BOTONES PRINCIPALES - DARK
+========================= */
+
+body.dark-mode .auth-btn-primary {
+  background: linear-gradient(135deg, #4f6ef0 0%, #2c4ec0 100%);
+  box-shadow: 0 14px 28px rgba(44, 72, 166, 0.35);
+}
+
+/* Optimizar sombra en móviles */
+@media (max-width: 768px) {
+  body.dark-mode .auth-btn-primary {
+    box-shadow: 0 8px 20px rgba(44, 72, 166, 0.3);
+  }
+}
+
+body.dark-mode .auth-btn-primary:hover {
+  background: linear-gradient(135deg, #5b7af5 0%, #385ad4 100%);
+}
+
+body.dark-mode .auth-btn-primary:active {
+  box-shadow: 0 4px 12px rgba(44, 72, 166, 0.3);
+  transform: scale(0.98);
+}
+
+body.dark-mode .auth-btn-secondary {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(103, 121, 226, 0.28);
+  color: #d7e1ff;
+}
+
+body.dark-mode .auth-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(103, 121, 226, 0.45);
+}
+
+body.dark-mode .auth-btn-secondary:active {
+  background: rgba(255, 255, 255, 0.14);
+  transform: scale(0.98);
+}
+
+/* =========================
+   HEADER - DARK
+========================= */
+
+body.dark-mode .header {
+  background: linear-gradient(135deg, #1a2448, #24356b);
+  box-shadow: 0 10px 26px rgba(3, 7, 20, 0.45);
+}
+
+body.dark-mode .menu-icon,
+body.dark-mode .plus-icon,
+body.dark-mode .sync-icon-btn,
+body.dark-mode .install-icon-btn {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+body.dark-mode .menu-icon:hover,
+body.dark-mode .plus-icon:hover,
+body.dark-mode .sync-icon-btn:hover,
+body.dark-mode .install-icon-btn:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+body.dark-mode .menu-icon:active,
+body.dark-mode .plus-icon:active,
+body.dark-mode .sync-icon-btn:active,
+body.dark-mode .install-icon-btn:active {
+  background: rgba(255, 255, 255, 0.24);
+  transform: scale(0.95);
+}
+
+/* =========================
+   SIDE MENU - DARK
+========================= */
+
+body.dark-mode .side-menu {
+  background: #121a31;
+  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.42);
+}
+
+body.dark-mode .menu-header,
+body.dark-mode .deleted-operations-section,
+body.dark-mode .fabric-pages-section,
+body.dark-mode .fabric-deleted-section,
+body.dark-mode .menu-view-actions {
+  background: #161f3c;
+  border-color: #26345f;
+}
+
+/* =========================
+   COMPONENTES INTERACTIVOS - DARK
+========================= */
+
+body.dark-mode .settings-back-btn,
+body.dark-mode .settings-card,
+body.dark-mode .account-panel,
+body.dark-mode .menu-view-btn,
+body.dark-mode .deleted-operation-row,
+body.dark-mode .operation-item,
+body.dark-mode .operation-name-input,
+body.dark-mode .op-action {
+  background: #192445;
+  border-color: #2f4278;
+  color: #edf2ff;
+}
+
+body.dark-mode .settings-back-btn:hover,
+body.dark-mode .menu-view-btn:hover,
+body.dark-mode .op-action:hover,
+body.dark-mode .operation-item:hover {
+  background: #202d54;
+  border-color: #4d68ba;
+}
+
+body.dark-mode .settings-back-btn:active,
+body.dark-mode .menu-view-btn:active,
+body.dark-mode .op-action:active,
+body.dark-mode .operation-item:active {
+  background: #253358;
+  border-color: #5b76cf;
+}
+
+body.dark-mode .menu-view-btn.active {
+  background: linear-gradient(135deg, #4f64d8, #304abf);
+  border-color: #6a84ff;
+  color: #fff;
+}
+
+/* =========================
+   ICONOS - DARK
+========================= */
+
+body.dark-mode .settings-inline-icon,
+body.dark-mode .settings-back-icon {
+  filter: brightness(1.22) contrast(1.05) saturate(0.92);
+}
+
+body.dark-mode .menu-header .settings-inline-icon {
+  filter: none;
+}
+
+/* =========================
+   SETTINGS - DARK
+========================= */
+
+body.dark-mode .settings-layer {
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(82, 113, 230, 0.18),
+      transparent 30%
+    ),
+    linear-gradient(180deg, #121a31 0%, #0f1629 100%);
+}
+
+body.dark-mode .settings-layer-header {
+  background: rgba(14, 21, 40, 0.86);
+  border-color: #27355f;
+}
+
+body.dark-mode .settings-card {
+  box-shadow: 0 18px 30px rgba(0, 0, 0, 0.24);
+}
+
+@media (max-width: 768px) {
+  body.dark-mode .settings-card {
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+  }
+}
+
+body.dark-mode .settings-action-btn {
+  background: linear-gradient(135deg, #1a2c59, #20396f);
+  border-color: #5571d6;
+  color: #eef3ff;
+}
+
+body.dark-mode .settings-action-btn:hover {
+  background: linear-gradient(135deg, #22376f, #2a4585);
+  border-color: #6d86e1;
+}
+
+body.dark-mode .settings-action-btn:active {
+  background: linear-gradient(135deg, #29407f, #314d98);
+}
+
+body.dark-mode .settings-theme-toggle[aria-pressed="true"] {
+  background: linear-gradient(135deg, #4b63d2, #3650c4);
+  border-color: #89a1ff;
+}
+
+/* =========================
+   BLUE BORDER BOX - DARK
+========================= */
+
+body.dark-mode .blue-border-box {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.05), transparent 42%),
+    linear-gradient(135deg, #244da5, #364fb2 82%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 -1px 0 rgba(10, 24, 72, 0.4),
+    0 8px 18px rgba(5, 10, 24, 0.28);
+}
+
+/* =========================
+   TABLAS - DARK
+========================= */
+
+body.dark-mode th {
+  background: #24355f;
+  color: #dce6ff;
+}
+
+body.dark-mode td {
+  background: #141d38;
+  color: #edf2ff;
+}
+
+body.dark-mode tr:hover td {
+  background: #24345f;
+}
+
+body.dark-mode td.price-inherited {
+  background: #35212a;
+}
+
+body.dark-mode .price-input.price-inherited {
+  background: #41252f;
+  border-color: #e5727a;
+  color: #ffd8db;
+}
+
+/* Tablas responsivas en móvil */
+@media (max-width: 640px) {
+  body.dark-mode th,
+  body.dark-mode td {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+}
+
+/* =========================
+   DELETE BUTTON - DARK
+========================= */
+
+body.dark-mode .delete-btn {
+  background: #1a223f;
+  border-color: #c85959;
+  color: #f0b5b5;
+}
+
+body.dark-mode .delete-btn:hover {
+  background: #3a2230;
+}
+
+body.dark-mode .delete-btn:active {
+  background: #452838;
+  transform: scale(0.97);
+}
+
+/* =========================
+   GREEN BOX - DARK
+========================= */
+
+body.dark-mode .green-box {
+  background: linear-gradient(180deg, #1a2444, #141d38);
+  border-color: #536ff0;
+  color: #ebefff;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 8px 16px rgba(0, 0, 0, 0.18);
+}
+
+body.dark-mode .green-box span:last-child {
+  color: #99b1ff;
+}
+
+/* =========================
+   GRAND TOTAL - DARK
+========================= */
+
+body.dark-mode .grand-total-row {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.04), transparent 48%),
+    linear-gradient(135deg, #243773, #1e2e60 78%, #18264f);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 16px 28px rgba(0, 0, 0, 0.22);
+}
+
+@media (max-width: 768px) {
+  body.dark-mode .grand-total-row {
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+}
+
+body.dark-mode .grand-total-row .green-box {
+  background: linear-gradient(
+    180deg,
+    rgba(26, 36, 68, 0.96),
+    rgba(20, 29, 56, 0.96)
+  );
+  border-color: #6a84ff;
+}
+
+/* =========================
+   LOGOUT - DARK
+========================= */
+
+body.dark-mode .logout-btn {
+  background: #2e1d28;
+  border-color: #794455;
+  color: #ffcad6;
+}
+
+body.dark-mode .logout-btn:hover {
+  background: #402432;
+}
+
+body.dark-mode .logout-btn:active {
+  background: #4e2a3a;
+  transform: scale(0.97);
+}
+
+/* =========================
+   CONTRASEÑA TOGGLE - DARK
+========================= */
+
+body.dark-mode .toggle-password-btn {
+  color: #9fb2eb;
+  background: transparent;
+}
+
+body.dark-mode .toggle-password-btn:hover {
+  color: #dce6ff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+body.dark-mode .toggle-password-btn:active {
+  color: #eef3ff;
+  background: rgba(255, 255, 255, 0.14);
+  transform: scale(0.95);
+}
+
+body.dark-mode .toggle-password-btn:focus-visible {
+  outline: 3px solid rgba(106, 132, 255, 0.25);
+  outline-offset: 2px;
+}
+
+/* =========================
+   SCROLLBAR - DARK
+   (Solo en dispositivos con scrollbar visible)
+========================= */
+
+@media (hover: hover) and (pointer: fine) {
+  body.dark-mode {
+    scrollbar-color: #31477f #121b35;
+    scrollbar-width: thin;
+  }
+  
+  body.dark-mode ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  body.dark-mode ::-webkit-scrollbar-track {
+    background: #121b35;
+  }
+
+  body.dark-mode ::-webkit-scrollbar-thumb {
+    background: #31477f;
+    border-radius: 999px;
+    border: 2px solid #121b35;
+  }
+
+  body.dark-mode ::-webkit-scrollbar-thumb:hover {
+    background: #4461ab;
+  }
+  
+  body.dark-mode ::-webkit-scrollbar-corner {
+    background: #121b35;
+  }
+}
+
+/* =========================
+   SELECCIÓN DE TEXTO - DARK
+========================= */
+
+body.dark-mode ::selection {
+  background: rgba(79, 100, 216, 0.4);
+  color: #ffffff;
+}
+
+/* =========================
+   AJUSTES ESPECÍFICOS MÓVILES
+========================= */
+
+/* Reducir sombras en dispositivos de bajo rendimiento */
+@media (max-width: 480px) and (prefers-reduced-motion: no-preference) {
+  body.dark-mode .auth-card,
+  body.dark-mode .settings-card,
+  body.dark-mode .grand-total-row {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+}
+
+/* Optimizar para modo oscuro del sistema en iOS */
+@supports (-webkit-touch-callout: none) {
+  body.dark-mode {
+    /* Forzar color de la barra de estado en iOS */
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  /* Corregir inputs en iOS dark mode */
+  body.dark-mode input,
+  body.dark-mode textarea {
+    -webkit-appearance: none;
+  }
+}
+
+/* Notch / Dynamic Island en iPhones */
+@supports (padding-top: env(safe-area-inset-top)) {
+  body.dark-mode .header {
+    padding-top: env(safe-area-inset-top);
+  }
+  
+  body.dark-mode .side-menu {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
