@@ -132,7 +132,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: 
+  transition:
     transform 0.2s ease,
     background 0.2s ease;
   -webkit-tap-highlight-color: transparent;
@@ -229,7 +229,8 @@
 ========================= */
 
 .deleted-operations-section {
-  padding: clamp(10px, 2.5vw, 14px) clamp(10px, 2.5vw, 15px) clamp(6px, 1.5vw, 8px);
+  padding: clamp(10px, 2.5vw, 14px) clamp(10px, 2.5vw, 15px)
+    clamp(6px, 1.5vw, 8px);
   border-bottom: 1px solid #dbe4fb;
   background: #f7f9ff;
 }
@@ -255,7 +256,8 @@
 ========================= */
 
 .fabric-pages-section {
-  padding: clamp(10px, 2.5vw, 14px) clamp(10px, 2.5vw, 15px) clamp(6px, 1.5vw, 8px);
+  padding: clamp(10px, 2.5vw, 14px) clamp(10px, 2.5vw, 15px)
+    clamp(6px, 1.5vw, 8px);
   border-bottom: 1px solid #dbe4fb;
   background: #f7f9ff;
 }
@@ -525,7 +527,11 @@
   display: flex;
   flex-direction: column;
   background:
-    radial-gradient(circle at top right, rgba(116, 150, 255, 0.22), transparent 30%),
+    radial-gradient(
+      circle at top right,
+      rgba(116, 150, 255, 0.22),
+      transparent 30%
+    ),
     linear-gradient(180deg, #f8fbff 0%, #eef4ff 100%);
   transform: translateX(108%);
   opacity: 0;
@@ -606,7 +612,8 @@
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
-  padding: clamp(14px, 3.5vw, 18px) clamp(12px, 3vw, 16px) clamp(16px, 4vw, 20px);
+  padding: clamp(14px, 3.5vw, 18px) clamp(12px, 3vw, 16px)
+    clamp(16px, 4vw, 20px);
   display: flex;
   flex-direction: column;
   gap: clamp(10px, 2.5vw, 14px);
@@ -888,7 +895,7 @@
     opacity: 1;
     transform: none;
   }
-  
+
   .side-menu {
     transition: none;
   }
@@ -903,17 +910,18 @@
   .side-menu {
     width: min(320px, 88vw);
   }
-  
+
   .menu-header {
     padding: clamp(10px, 2.5vw, 14px) clamp(8px, 2vw, 12px);
   }
-  
+
   .menu-brand-name {
     font-size: clamp(10px, 2.5vw, 12px);
   }
-  
+
   .settings-layer-content {
-    padding: clamp(10px, 2.5vw, 14px) clamp(8px, 2vw, 12px) clamp(12px, 3vw, 16px);
+    padding: clamp(10px, 2.5vw, 14px) clamp(8px, 2vw, 12px)
+      clamp(12px, 3vw, 16px);
   }
 }
 
@@ -922,25 +930,23 @@
   .side-menu {
     width: 92vw;
   }
-  
+
   .operation-row {
     gap: 4px;
   }
-  
+
   .op-action {
     width: 34px;
     height: 34px;
     min-width: 34px;
     min-height: 34px;
   }
-  
+
   .deleted-operation-row {
     min-height: 36px;
     padding: 6px 8px;
   }
 }
-
-
 
 /* =========================
    ADMIN PANEL - BOTÓN ABRIR
@@ -1097,4 +1103,40 @@
   .admin-panel-separator {
     display: none; /* Ocultar el punto separador */
   }
+}
+
+/* =========================
+   DELETED LAYER - TWEAKS
+========================= */
+
+/* Cuando el botón 'Eliminados' está activo (usa aria-pressed) */
+.menu-view-btn[aria-pressed="true"] {
+  background: linear-gradient(135deg, #dfe7ff, #d6e0ff);
+  border-color: #9fb5ef;
+  color: #21367d;
+}
+
+/* Encabezado de la capa eliminados -> contraste y legibilidad */
+#deleted-layer .settings-layer-header {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.96),
+    rgba(249, 240, 242, 0.98)
+  );
+  border-bottom: 1px solid #f1dede;
+}
+
+#deleted-layer .settings-layer-title {
+  color: #6d3531; /* tono similar al nombre de elementos eliminados */
+}
+
+/* Hacer que el contenido de eliminados sea más compacto en móvil */
+#deleted-layer .deleted-operations-container {
+  max-height: calc(100vh - 220px);
+  overflow: auto;
+}
+
+/* Acentuar botón de eliminación definitiva */
+.op-action.delete {
+  border-color: #f2c9c9;
 }
