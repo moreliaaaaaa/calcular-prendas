@@ -87,28 +87,36 @@ export function validateAuthForm(form, mode) {
 export async function validateAuthFormServer(form, mode) {
   if (!supabase) return "";
 
-  const body = JSON.stringify({ form, mode });
   const { data, error } = await supabase.functions.invoke("validate-auth", {
-    body,
+    body: { form, mode },
   });
 
   if (error) {
-    if (error.message?.includes("not found")) return "";
-    return "Error de validación del servidor. Inténtalo de nuevo.";
-  }
+    const response = error?.context;
 
-  let result = data;
-
-  if (data instanceof Uint8Array) {
-    try {
-      result = JSON.parse(new TextDecoder().decode(data));
-    } catch {
-      result = null;
+    if (response && typeof response.json === "function") {
+      try {
+        const payload = await response.json();
+        if (payload && typeof payload === "object" && payload.error) {
+          return payload.error;
+        }
+      } catch {
+        // Si no podemos leer el cuerpo, dejamos pasar el registro.
+      }
     }
+
+    if (error.message?.includes("not found")) return "";
+    console.warn("validate-auth no disponible:", error);
+    return "";
   }
 
-  if (result && typeof result === "object" && "error" in result) {
-    return result.error || "Error de validación del servidor.";
+  const result = data && typeof data === "object" ? data : null;
+  if (!result) {
+    return "";
+  }
+
+  if (result.error) {
+    return result.error;
   }
 
   return "";

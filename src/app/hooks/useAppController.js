@@ -2,7 +2,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useCalculatorActions } from "@/app/hooks/useCalculatorActions.js";
 import {
   validateAuthForm,
-  validateAuthFormServer,
   showAuthError,
 } from "@/app/lib/auth.js";
 import { SUPABASE_CONFIG } from "@/config";
@@ -453,13 +452,6 @@ export function useAppController() {
       return;
     }
 
-    const serverValidation = await validateAuthFormServer(form, "login");
-    if (serverValidation) {
-      setAuthMessage(serverValidation);
-      setAuthMessageType("error");
-      return;
-    }
-
     setAuthLoading(true);
     setAuthMessage("Iniciando sesión...");
     setAuthMessageType("");
@@ -488,13 +480,6 @@ export function useAppController() {
     const validation = validateAuthForm(form, "signup");
     if (validation) {
       setAuthMessage(validation);
-      setAuthMessageType("error");
-      return;
-    }
-
-    const serverValidation = await validateAuthFormServer(form, "signup");
-    if (serverValidation) {
-      setAuthMessage(serverValidation);
       setAuthMessageType("error");
       return;
     }
