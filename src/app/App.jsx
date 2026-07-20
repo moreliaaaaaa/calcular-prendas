@@ -33,6 +33,7 @@ export default function App() {
       adminActivityLoading={app.adminActivityLoading}
       adminActivityError={app.adminActivityError}
       adminActivityUpdatedAt={app.adminActivityUpdatedAt}
+      onAdminActivityRefresh={app.loadAdminActivity}
       syncStatus={app.syncStatus}
       installAvailable={Boolean(app.installPrompt)}
       menuOpen={app.menuOpen}

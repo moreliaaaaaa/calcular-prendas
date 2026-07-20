@@ -6,6 +6,7 @@ import {
   fabricPurchaseDisplayName,
 } from "@/shared/lib/store.js";
 import { AdminActivityPanel } from "./AdminActivityPanel.jsx";
+import { AdminActivityDashboard } from "./AdminActivityDashboard.jsx";
 import "@/styles/modules/menu-settings.css";
 
 export function SideMenu({
@@ -22,6 +23,7 @@ export function SideMenu({
   adminActivityLoading,
   adminActivityError,
   adminActivityUpdatedAt,
+  onAdminActivityRefresh,
   onClose,
   onSettingsOpen,
   onSettingsClose,
@@ -43,6 +45,7 @@ export function SideMenu({
   const closeBtnRef = useRef(null);
   const menuClickTimer = useRef(null);
   const [deletedLayerOpen, setDeletedLayerOpen] = useState(false);
+  const [adminActivityOpen, setAdminActivityOpen] = useState(false);
 
   // ✅ Bloquear scroll del body cuando el menú está abierto
   useEffect(() => {
@@ -61,7 +64,9 @@ export function SideMenu({
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === "Escape" && open) {
-        if (settingsOpen) {
+        if (adminActivityOpen) {
+          setAdminActivityOpen(false);
+        } else if (settingsOpen) {
           onSettingsClose();
         } else {
           onClose();
@@ -70,7 +75,11 @@ export function SideMenu({
     };
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [open, settingsOpen, onClose, onSettingsClose]);
+  }, [adminActivityOpen, open, settingsOpen, onClose, onSettingsClose]);
+
+  useEffect(() => {
+    if (!open) setAdminActivityOpen(false);
+  }, [open]);
 
   const triggerEdit = useCallback((target) => {
     clearTimeout(menuClickTimer.current);
@@ -481,6 +490,10 @@ export function SideMenu({
               error={adminActivityError}
               rows={adminActivity}
               updatedAt={adminActivityUpdatedAt}
+              onOpen={() => {
+                setAdminActivityOpen(true);
+                onAdminActivityRefresh?.();
+              }}
             />
 
             {/* Cuenta */}
@@ -507,6 +520,15 @@ export function SideMenu({
             </div>
           </div>
         </div>
+        <AdminActivityDashboard
+          visible={isAdmin && adminActivityOpen}
+          loading={adminActivityLoading}
+          error={adminActivityError}
+          rows={adminActivity}
+          updatedAt={adminActivityUpdatedAt}
+          onClose={() => setAdminActivityOpen(false)}
+          onRefresh={onAdminActivityRefresh}
+        />
         {/* Capa de Eliminados */}
         <div
           id="deleted-layer"

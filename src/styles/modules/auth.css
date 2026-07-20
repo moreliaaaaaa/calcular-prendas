@@ -4,39 +4,37 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: clamp(16px, 3vw, 28px);
-  overflow-y: auto;
+  padding: clamp(10px, 2.5vw, 18px);
+  overflow: hidden;
   overscroll-behavior: contain;
   box-sizing: border-box;
   background:
     radial-gradient(circle at top left, rgba(86, 114, 235, 0.24), transparent 30%),
     radial-gradient(circle at 92% 18%, rgba(53, 135, 255, 0.16), transparent 21%),
-    linear-gradient(180deg, #f3f7ff 0%, #e8edf9 100%);
+    linear-gradient(135deg, #f6f8ff 0%, #eef2ff 45%, #fdf7f2 100%);
   z-index: 3000;
 }
 
 .auth-card {
-  width: min(100%, 460px);
-  max-width: calc(100vw - 2 * clamp(16px, 3vw, 28px));
-  max-height: calc(100dvh - 2 * clamp(16px, 3vw, 28px));
+  width: min(100%, 440px);
+  max-width: calc(100vw - 2 * clamp(10px, 2.5vw, 18px));
+  max-height: min(100dvh - 2 * clamp(10px, 2.5vw, 18px), 720px);
   box-sizing: border-box;
   background: rgba(255, 255, 255, 0.94);
   border: 1px solid rgba(95, 117, 210, 0.18);
   border-radius: 28px;
-  padding: clamp(24px, 5vw, 36px);
-  box-shadow: 0 28px 70px rgba(28, 47, 95, 0.16);
-  backdrop-filter: blur(12px);
-  overflow-y: auto;
+  padding: clamp(16px, 3.2vw, 24px);
+  box-shadow: 0 24px 60px rgba(28, 47, 95, 0.16);
+  backdrop-filter: blur(14px);
+  overflow: hidden;
   overscroll-behavior: contain;
 }
 
-.auth-brand {
+.auth-hero {
   display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 10px;
-  margin-bottom: clamp(16px, 4vw, 22px);
-  text-align: left;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: clamp(10px, 2.8vw, 14px);
 }
 
 .auth-brand-row {
@@ -44,17 +42,16 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  align-self: center;
-  gap: 0;
+  gap: 8px;
   min-width: 0;
   max-width: 100%;
 }
 
 .auth-logo {
   display: block;
-  width: clamp(32px, 10vw, 44px);
+  width: clamp(34px, 10vw, 46px);
   height: auto;
-  max-height: clamp(28px, 9vw, 40px);
+  max-height: clamp(30px, 9vw, 40px);
   flex: 0 0 auto;
   object-fit: contain;
   transform: translateY(1px);
@@ -62,16 +59,16 @@
 
 .auth-brand-name {
   display: inline-block;
-  margin-left: clamp(2px, 1vw, 4px);
   color: #21367d;
   font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(11px, 3.5vw, 14px);
+  font-size: clamp(12px, 3.6vw, 15px);
   font-weight: 800;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.16em;
   line-height: 1.2;
   text-transform: uppercase;
   text-shadow: 0 1px 1px rgba(7, 13, 46, 0.12);
 }
+
 
 .auth-eyebrow {
   font-size: clamp(10px, 3vw, 12px);
@@ -92,36 +89,36 @@
 
 .auth-copy {
   color: #5e6f92;
-  font-size: clamp(13px, 3.8vw, 15px);
-  line-height: 1.6;
-  margin-bottom: clamp(14px, 5vw, 24px);
+  font-size: clamp(12px, 3.3vw, 14px);
+  line-height: 1.5;
+  margin-bottom: clamp(10px, 3vw, 16px);
 }
 
 .auth-form {
   display: grid;
-  gap: clamp(10px, 3.5vw, 18px);
+  gap: clamp(8px, 2.4vw, 12px);
 }
 
 .auth-field {
   display: flex;
   flex-direction: column;
-  gap: clamp(4px, 1.5vw, 8px);
+  gap: clamp(4px, 1.2vw, 6px);
   color: #283767;
-  font-size: clamp(13px, 3.5vw, 14px);
+  font-size: clamp(12px, 3.2vw, 13px);
   font-weight: 600;
 }
 
-.auth-field input {
+.auth-field input,
+.auth-field select {
   width: 100%;
   border: 1px solid rgba(81, 102, 190, 0.18);
-  border-radius: clamp(12px, 3vw, 16px);
-  padding: clamp(11px, 3vw, 15px) clamp(14px, 3.5vw, 18px);
-  font-size: clamp(14px, 3.8vw, 16px);
-  /* 16px mínimo para evitar zoom automático en iOS */
+  border-radius: 14px;
+  padding: clamp(10px, 2.8vw, 12px) clamp(12px, 3vw, 14px);
+  font-size: clamp(14px, 3.8vw, 15px);
   outline: none;
-  background: #f6f8ff;
+  background: linear-gradient(180deg, #f9faff 0%, #f3f6ff 100%);
   color: #202b54;
-  box-shadow: inset 0 1px 4px rgba(73, 94, 165, 0.08);
+  box-shadow: inset 0 1px 3px rgba(73, 94, 165, 0.08);
   transition:
     border-color 0.2s ease,
     box-shadow 0.2s ease,
@@ -136,7 +133,8 @@
   }
 }
 
-.auth-field input:hover {
+.auth-field input:hover,
+.auth-field select:hover {
   border-color: rgba(76, 100, 216, 0.4);
   transform: translateY(-1px);
 }
@@ -201,16 +199,18 @@
   pointer-events: none;
 }
 
-.auth-field input:focus-visible {
+.auth-field input:focus-visible,
+.auth-field select:focus-visible {
   border-color: #4c64d8;
   box-shadow: 0 0 0 4px rgba(79, 100, 216, 0.14);
   background: #fff;
 }
 
 .auth-message {
-  min-height: clamp(16px, 4.5vw, 22px);
-  font-size: clamp(12px, 3.2vw, 14px);
+  min-height: clamp(14px, 3.8vw, 18px);
+  font-size: clamp(11px, 3vw, 13px);
   color: #56678f;
+  margin: 2px 0;
 }
 
 .auth-message.is-error {
@@ -223,20 +223,19 @@
 
 .auth-actions {
   display: flex;
-  gap: clamp(10px, 3vw, 14px);
+  gap: clamp(8px, 2.4vw, 10px);
 }
 
 .auth-btn {
   flex: 1;
   border: none;
   border-radius: 999px;
-  padding: clamp(11px, 3vw, 14px) clamp(14px, 3.5vw, 18px);
-  font-size: clamp(13px, 3.5vw, 14px);
+  padding: clamp(10px, 2.8vw, 12px) clamp(12px, 3.2vw, 14px);
+  font-size: clamp(12px, 3.2vw, 13px);
   font-weight: 700;
   letter-spacing: 0.01em;
   cursor: pointer;
-  /* Área táctil mínima */
-  min-height: 44px;
+  min-height: 42px;
   transition:
     transform 0.22s ease,
     box-shadow 0.22s ease,
@@ -271,15 +270,15 @@
 
 .auth-btn-primary {
   color: #ffffff;
-  background: linear-gradient(135deg, #4d6dff 0%, #2f53d1 100%);
+  background: linear-gradient(135deg, #5a74ff 0%, #3a56c8 100%);
   box-shadow: 0 12px 24px rgba(45, 72, 170, 0.22);
 }
 
 .auth-btn-secondary {
   color: #2c3d80;
-  background: rgba(255, 255, 255, 0.85);
-  border: 1px solid rgba(79, 106, 206, 0.2);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.62);
+  background: linear-gradient(180deg, #ffffff 0%, #f6f8ff 100%);
+  border: 1px solid rgba(79, 106, 206, 0.18);
+  box-shadow: 0 8px 18px rgba(58, 86, 200, 0.08);
 }
 
 .auth-btn-secondary:hover {
@@ -288,7 +287,7 @@
 
 .auth-recover-btn {
   align-self: center;
-  margin-top: clamp(6px, 2vw, 8px);
+  margin-top: clamp(4px, 1.5vw, 6px);
   border: none;
   background: transparent;
   color: #4c64d8;
@@ -329,11 +328,12 @@
 @media (max-width: 520px) {
   .auth-screen {
     align-items: flex-start;
-    padding: clamp(10px, 3vw, 18px);
+    padding: clamp(8px, 2.4vw, 12px);
   }
 
   .auth-card {
-    border-radius: clamp(18px, 4vw, 22px);
+    border-radius: clamp(16px, 3.5vw, 20px);
+    max-height: calc(100dvh - 16px);
   }
 
   .auth-actions {
@@ -362,8 +362,8 @@
   }
 
   .auth-brand {
-    margin-bottom: clamp(8px, 3vw, 14px);
-    gap: clamp(4px, 1.5vw, 8px);
+    margin-bottom: clamp(8px, 2.4vw, 10px);
+    gap: clamp(4px, 1.2vw, 6px);
   }
 
   .auth-brand-row {
@@ -385,16 +385,17 @@
   }
 
   .auth-copy {
-    font-size: clamp(11px, 3vw, 13px);
-    margin-bottom: clamp(8px, 3vw, 14px);
+    font-size: clamp(11px, 2.8vw, 12px);
+    margin-bottom: clamp(8px, 2.2vw, 10px);
   }
 
   .auth-form {
-    gap: clamp(6px, 2vw, 10px);
+    gap: clamp(6px, 1.8vw, 8px);
   }
 
-  .auth-field input {
-    padding: clamp(8px, 2.5vw, 12px) clamp(10px, 3vw, 14px);
+  .auth-field input,
+  .auth-field select {
+    padding: clamp(8px, 2.2vw, 10px) clamp(10px, 2.6vw, 12px);
   }
 }
 

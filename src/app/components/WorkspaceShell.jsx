@@ -20,6 +20,7 @@ export function WorkspaceShell({
   adminActivityLoading,
   adminActivityError,
   adminActivityUpdatedAt,
+  onAdminActivityRefresh,
   toast,
   onMenu,
   onAddSection,
@@ -69,6 +70,7 @@ export function WorkspaceShell({
           adminActivityLoading={adminActivityLoading}
           adminActivityError={adminActivityError}
           adminActivityUpdatedAt={adminActivityUpdatedAt}
+          onAdminActivityRefresh={onAdminActivityRefresh}
           onClose={onCloseMenu}
           onSettingsOpen={onSettingsOpen}
           onSettingsClose={onSettingsClose}
@@ -79,7 +81,7 @@ export function WorkspaceShell({
           actions={actions}
         />
 
-        <WorkspaceContent activeView={activeView} active={active} actions={actions} />
+        <WorkspaceContent activeView={activeView} active={active} actions={actions} user={user} />
       </div>
       <Toast toast={toast} />
     </>

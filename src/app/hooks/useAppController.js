@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useCalculatorActions } from "@/app/hooks/useCalculatorActions.js";
 import {
+  getCountryConfig,
   validateAuthForm,
   showAuthError,
 } from "@/app/lib/auth.js";
@@ -122,7 +123,7 @@ export function useAppController() {
       )
       .order("activity_score", { ascending: false })
       .order("last_activity_at", { ascending: false })
-      .limit(10);
+      .limit(100);
 
     if (error) {
       setAdminActivity([]);
@@ -488,6 +489,8 @@ export function useAppController() {
     setAuthMessage("Creando cuenta...");
     setAuthMessageType("");
 
+    const countryConfig = getCountryConfig(form.country);
+
     const { data, error } = await supabase.auth.signUp({
       email: form.email.trim(),
       password: form.password,
@@ -495,6 +498,11 @@ export function useAppController() {
         data: {
           name: form.name.trim(),
           full_name: form.name.trim(),
+          country: countryConfig.code,
+          country_name: countryConfig.label,
+          currency: countryConfig.currency,
+          language: countryConfig.language,
+          locale: countryConfig.locale,
         },
       },
     });
@@ -691,6 +699,7 @@ export function useAppController() {
     adminActivityLoading,
     adminActivityError,
     adminActivityUpdatedAt,
+    loadAdminActivity,
     syncStatus,
     installPrompt,
     actions,

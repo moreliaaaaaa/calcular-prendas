@@ -1,13 +1,15 @@
+import { getUiText } from "@/app/lib/auth.js";
 import { icon } from "@/shared/assets/icons.js";
 import { EditableText } from "@/shared/ui/EditableText.jsx";
-import { calcSection, effectivePrice, formatNumber, inheritedPrice, inputValue } from "@/shared/lib/calculations.js";
+import { calcSection, effectivePrice, formatCurrency, formatNumber, inheritedPrice, inputValue } from "@/shared/lib/calculations.js";
 import { sanitizeOperationLabels, sanitizeSectionLabels } from "@/shared/lib/store.js";
 import "@/styles/modules/tables.css";
 
-function GarmentSection({ section, onChange, onDelete, onAddRow, onDeleteRow, onRename, onLabel }) {
+function GarmentSection({ section, onChange, onDelete, onAddRow, onDeleteRow, onRename, onLabel, user }) {
   const totals = calcSection(section.rows);
   const fallbackPrice = inheritedPrice(section.rows);
   const labels = sanitizeSectionLabels(section.labels);
+  const t = (key) => getUiText(key, user);
 
   return (
     <section className="size-section" data-section-id={section.id}>
@@ -15,13 +17,13 @@ function GarmentSection({ section, onChange, onDelete, onAddRow, onDeleteRow, on
         <EditableText
           className="tab-button editable-title"
           value={section.label}
-          label="Editar nombre de la prenda"
+          label={t("uiEditGarmentName")}
           onSave={(value) => onRename(section.id, value)}
         />
-        <button className="section-delete-btn" type="button" aria-label="Eliminar este bloque" title="Eliminar bloque" onClick={() => onDelete(section.id)}>
+        <button className="section-delete-btn" type="button" aria-label={t("uiDeleteBlock")} title={t("uiDeleteBlock")} onClick={() => onDelete(section.id)}>
           <img src={icon("contenedor-de-basura")} alt="" className="icon-trash" aria-hidden="true" />
         </button>
-        <button className="section-add-btn" type="button" aria-label="Agregar fila en esta seccion" title="Agregar fila" onClick={() => onAddRow(section.id)}>
+        <button className="section-add-btn" type="button" aria-label={t("uiAddRow")} title={t("uiAddRow")} onClick={() => onAddRow(section.id)}>
           <img src={icon("addition")} alt="" className="icon-add" aria-hidden="true" />
         </button>
       </div>
@@ -31,8 +33,8 @@ function GarmentSection({ section, onChange, onDelete, onAddRow, onDeleteRow, on
           <tr>
             <th><EditableText value={labels.size} onSave={(value) => onLabel(section.id, "size", value)} label="Editar etiqueta" /></th>
             <th><EditableText value={labels.qty} onSave={(value) => onLabel(section.id, "qty", value)} label="Editar etiqueta" /></th>
-            <th>PRECIO</th>
-            <th>ELIMINAR</th>
+            <th>{t("uiPrice")}</th>
+            <th>{t("uiDelete")}</th>
           </tr>
         </thead>
         <tbody data-section-body={section.id}>
@@ -41,8 +43,8 @@ function GarmentSection({ section, onChange, onDelete, onAddRow, onDeleteRow, on
             const currentEffectivePrice = effectivePrice(row, fallbackPrice);
             const priceStateClass = priceIsInherited ? "price-inherited" : "";
             const priceLabel = priceIsInherited
-              ? `Precio automatico: ${formatNumber(currentEffectivePrice)}`
-              : "Precio propio";
+              ? `${t("uiPriceAutomatic")}: ${formatCurrency(currentEffectivePrice, user)}`
+              : t("uiPriceOwn");
 
             return (
               <tr data-index={index} key={`${section.id}-${index}`}>
@@ -65,7 +67,7 @@ function GarmentSection({ section, onChange, onDelete, onAddRow, onDeleteRow, on
                   />
                 </td>
                 <td>
-                  <button className="delete-btn" type="button" aria-label="Eliminar fila" onClick={() => onDeleteRow(section.id, index)}>
+                  <button className="delete-btn" type="button" aria-label={t("uiDeleteRow")} onClick={() => onDeleteRow(section.id, index)}>
                     <img src={icon("contenedor-de-basura")} alt="" className="icon-trash" aria-hidden="true" />
                   </button>
                 </td>
@@ -82,15 +84,16 @@ function GarmentSection({ section, onChange, onDelete, onAddRow, onDeleteRow, on
         </div>
         <div className="green-box">
           <EditableText className="total-label" value={labels.totalPrice} onSave={(value) => onLabel(section.id, "totalPrice", value)} label="Editar etiqueta" />
-          <span>{formatNumber(totals.total)}</span>
+          <span>{formatCurrency(totals.total, user)}</span>
         </div>
       </div>
     </section>
   );
 }
 
-export function GarmentsView({ active, actions }) {
+export function GarmentsView({ active, actions, user }) {
   const labels = sanitizeOperationLabels(active.labels);
+  const t = (key) => getUiText(key, user);
   const grand = active.sections.reduce(
     (acc, section) => {
       const totals = calcSection(section.rows);
@@ -114,15 +117,16 @@ export function GarmentsView({ active, actions }) {
             onDeleteRow={actions.deleteGarmentRow}
             onRename={actions.renameSection}
             onLabel={actions.updateSectionLabel}
+            user={user}
           />
         ))}
       </div>
 
       <div className="totals-row grand-total-row">
-        <h3 className="summary-title">RESUMEN GENERAL</h3>
+        <h3 className="summary-title">{t("uiSummary")}</h3>
         <div className="green-box">
           <EditableText className="total-label" value={labels.sumTotal} onSave={(value) => actions.updateOperationLabel("sumTotal", value)} label="Editar etiqueta" />
-          <span id="grand-total">{formatNumber(grand.total)}</span>
+          <span id="grand-total">{formatCurrency(grand.total, user)}</span>
         </div>
         <div className="green-box">
           <EditableText className="total-label" value={labels.totalGarments} onSave={(value) => actions.updateOperationLabel("totalGarments", value)} label="Editar etiqueta" />

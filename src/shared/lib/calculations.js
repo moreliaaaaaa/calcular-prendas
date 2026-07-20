@@ -1,4 +1,6 @@
-export const NUMBER_FORMATTER = new Intl.NumberFormat("es-PE", {
+import { getCountryConfig } from "@/app/lib/auth.js";
+
+export const NUMBER_FORMATTER = new Intl.NumberFormat("es-CL", {
   minimumFractionDigits: 0,
   maximumFractionDigits: 2,
 });
@@ -14,9 +16,36 @@ export function toNumber(value) {
   return Number.isNaN(parsed) ? 0 : Math.max(0, parsed);
 }
 
-export function formatNumber(number) {
+export function formatNumber(number, user = null) {
   if (Number.isNaN(number)) return "0";
-  return NUMBER_FORMATTER.format(number);
+
+  const countryConfig = user
+    ? getCountryConfig(user?.user_metadata?.country || user?.user_metadata?.country_code || user?.country)
+    : getCountryConfig("CL");
+
+  const formatter = new Intl.NumberFormat(countryConfig.locale || "es-CL", {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
+  });
+
+  return formatter.format(number);
+}
+
+export function formatCurrency(number, user = null) {
+  if (Number.isNaN(number)) return "0";
+
+  const countryConfig = user
+    ? getCountryConfig(user?.user_metadata?.country || user?.user_metadata?.country_code || user?.country)
+    : getCountryConfig("CL");
+
+  const formatter = new Intl.NumberFormat(countryConfig.locale || "es-CL", {
+    style: "currency",
+    currency: countryConfig.currency || "CLP",
+    minimumFractionDigits: countryConfig.currency === "CLP" ? 0 : 2,
+    maximumFractionDigits: countryConfig.currency === "CLP" ? 0 : 2,
+  });
+
+  return formatter.format(number);
 }
 
 export function inputValue(value) {

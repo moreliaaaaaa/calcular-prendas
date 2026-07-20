@@ -45,19 +45,21 @@ export const DEFAULT_FABRIC_LABELS = {
 
 export const DEFAULT_DATA = {
   kids: [
-    { size: "6", qty: 15, price: 650 },
-    { size: "8", qty: 20, price: 650 },
+    { size: "2",  qty: 10, price: 650 },
+    { size: "4",  qty: 10, price: 650 },
+    { size: "6",  qty: 10, price: 650 },
+    { size: "8",  qty: 10, price: 650 },
     { size: "10", qty: 10, price: 650 },
-    { size: "12", qty: 15, price: 650 },
-    { size: "14", qty: 20, price: 650 },
-    { size: "16", qty: 10, price: 650 },
+    { size: "12", qty: 10, price: 700 },
+    { size: "14", qty: 10, price: 700 },
+    { size: "16", qty: 10, price: 700 },
   ],
   adults: [
-    { size: "S", qty: 10, price: 700 },
-    { size: "M", qty: 20, price: 700 },
-    { size: "L", qty: 15, price: 700 },
-    { size: "XL", qty: 15, price: 700 },
-    { size: "XXL", qty: 23, price: 750 },
+    { size: "S",   qty: 10, price: 800 },
+    { size: "M",   qty: 20, price: 800 },
+    { size: "L",   qty: 15, price: 800 },
+    { size: "XL",  qty: 15, price: 800 },
+    { size: "XXL", qty: 23, price: 850 },
   ],
 };
 
@@ -66,7 +68,7 @@ const DEFAULT_FABRIC_PURCHASE = {
     {
       id: "default-block",
       title: "PRECIO POR KILO",
-      rows: [{ id: "default-row", rolls: 10, kgPerRoll: 25, pricePerKg: 2500 }],
+      rows: [{ id: "default-row", rolls: 0, kgPerRoll: 0, pricePerKg: 0 }],
     },
   ],
 };
@@ -191,7 +193,7 @@ export function sanitizeFabricBlock(block = {}, index = 0, fallbackLabels = {}) 
           {
             rolls: block?.rolls ?? 10,
             kgPerRoll: block?.kgPerRoll ?? 25,
-            pricePerKg: block?.pricePerKg ?? 2500,
+            pricePerKg: block?.pricePerKg ?? 7500,
           },
         ];
 
@@ -258,13 +260,7 @@ export function createFabricPurchase(index = 0) {
       id: createId("fabric"),
       createdAt: new Date().toISOString(),
       name: "",
-      blocks: [
-        {
-          id: createId("fabric-block"),
-          title: "PRECIO POR KILO",
-          rows: [{ id: createId("fabric-row"), rolls: 10, kgPerRoll: 25, pricePerKg: 2500 }],
-        },
-      ],
+      blocks: [createFabricBlock(0)],
     },
     index,
   );

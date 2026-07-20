@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { COUNTRY_OPTIONS, getUiText } from "@/app/lib/auth.js";
 import { icon } from "@/shared/assets/icons.js";
 import "@/styles/modules/auth.css";
 
@@ -11,17 +12,23 @@ export function AuthScreen({
   onSignup,
   onRecover,
 }) {
-  const [form, setForm] = useState({ name: "", email: "", password: "" });
+  const buildEmptyForm = () => ({
+    name: "",
+    email: "",
+    password: "",
+    country: "CL",
+  });
+  const [form, setForm] = useState(buildEmptyForm);
   const [showPassword, setShowPassword] = useState(false);
+  const language = getUiText("authWelcome", form.country) === "Bem-vindo" ? "pt" : "es";
+  const t = (key) => getUiText(key, form.country);
 
   const update = (field, value) =>
     setForm((current) => ({ ...current, [field]: value }));
-  const submitLogin = () =>
-    onLogin(form, () => setForm({ name: "", email: "", password: "" }));
-  const submitSignup = () =>
-    onSignup(form, () => setForm({ name: "", email: "", password: "" }));
-  const submitRecover = () =>
-    onRecover(form, () => setForm({ name: "", email: "", password: "" }));
+  const resetForm = () => setForm(buildEmptyForm());
+  const submitLogin = () => onLogin(form, resetForm);
+  const submitSignup = () => onSignup(form, resetForm);
+  const submitRecover = () => onRecover(form, resetForm);
 
   return (
     <div
@@ -30,7 +37,7 @@ export function AuthScreen({
       aria-hidden={!visible}
     >
       <div className="auth-card">
-        <div className="auth-brand">
+        <div className="auth-hero">
           <div className="auth-brand-row" aria-label="Morelia">
             <img
               className="auth-logo"
@@ -42,11 +49,9 @@ export function AuthScreen({
               ORELIA
             </span>
           </div>
-          
-          <h2>Bienvenido</h2>
         </div>
 
-        <p className="auth-copy">Crea tu cuenta o inicia sesión.</p>
+        <p className="auth-copy">{t("authCopy")}</p>
 
         <form
           id="auth-form"
@@ -58,7 +63,7 @@ export function AuthScreen({
           }}
         >
           <label className="auth-field">
-            <span>Nombre</span>
+            <span>{t("authName")}</span>
             <input
               id="auth-name"
               name="name"
@@ -71,7 +76,7 @@ export function AuthScreen({
           </label>
 
           <label className="auth-field">
-            <span>Correo electrónico</span>
+            <span>{t("authEmail")}</span>
             <input
               id="auth-email"
               name="email"
@@ -87,7 +92,23 @@ export function AuthScreen({
           </label>
 
           <label className="auth-field">
-            <span>Contraseña</span>
+            <span>{t("authCountry")}</span>
+            <select
+              id="auth-country"
+              name="country"
+              value={form.country}
+              onChange={(event) => update("country", event.target.value)}
+            >
+              {COUNTRY_OPTIONS.map((option) => (
+                <option key={option.code} value={option.code}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="auth-field">
+            <span>{t("authPassword")}</span>
             <div className="password-wrapper">
               <input
                 id="auth-password"
@@ -106,7 +127,7 @@ export function AuthScreen({
                 className="toggle-password-btn"
                 type="button"
                 aria-label={
-                  showPassword ? "Ocultar contraseña" : "Mostrar contraseña"
+                  showPassword ? t("authPasswordHide") : t("authPasswordShow")
                 }
                 aria-pressed={showPassword}
                 onClick={() => setShowPassword((value) => !value)}
@@ -139,7 +160,7 @@ export function AuthScreen({
               disabled={loading}
               onClick={submitLogin}
             >
-              Iniciar sesión
+              {t("authLogin")}
             </button>
             <button
               id="signup-btn"
@@ -148,7 +169,7 @@ export function AuthScreen({
               disabled={loading}
               onClick={submitSignup}
               >
-                Registrarse
+                {t("authSignup")}
               </button>
           </div>
 
@@ -159,7 +180,7 @@ export function AuthScreen({
             disabled={loading}
             onClick={submitRecover}
           >
-            ¿Olvidaste tu contraseña?
+            {t("authRecover")}
           </button>
         </form>
       </div>

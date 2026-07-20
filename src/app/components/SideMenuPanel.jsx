@@ -14,6 +14,7 @@ export function SideMenuPanel({
   adminActivityLoading,
   adminActivityError,
   adminActivityUpdatedAt,
+  onAdminActivityRefresh,
   onClose,
   onSettingsOpen,
   onSettingsClose,
@@ -38,6 +39,7 @@ export function SideMenuPanel({
       adminActivityLoading={adminActivityLoading}
       adminActivityError={adminActivityError}
       adminActivityUpdatedAt={adminActivityUpdatedAt}
+      onAdminActivityRefresh={onAdminActivityRefresh}
       onClose={onClose}
       onSettingsOpen={onSettingsOpen}
       onSettingsClose={onSettingsClose}

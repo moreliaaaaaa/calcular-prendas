@@ -1,26 +1,28 @@
+import { getUiText } from "@/app/lib/auth.js";
 import { icon } from "@/shared/assets/icons.js";
 import { EditableText } from "@/shared/ui/EditableText.jsx";
-import { calcFabricBlock, calcFabricPurchase, formatNumber, inputValue } from "@/shared/lib/calculations.js";
+import { calcFabricBlock, calcFabricPurchase, formatCurrency, formatNumber, inputValue } from "@/shared/lib/calculations.js";
 import { sanitizeFabricBlocks, sanitizeFabricLabels } from "@/shared/lib/store.js";
 import "@/styles/modules/fabric.css";
 
-function FabricBlock({ block, onRow, onAddRow, onDeleteRow, onDeleteBlock, onRename, onLabel }) {
+function FabricBlock({ block, onRow, onAddRow, onDeleteRow, onDeleteBlock, onRename, onLabel, user }) {
   const labels = sanitizeFabricLabels(block.labels);
   const totals = calcFabricBlock(block);
+  const t = (key) => getUiText(key, user);
 
   return (
     <section className="fabric-purchase-section" data-fabric-block={block.id} aria-label="Compra de telas">
       <div className="blue-border-box fabric-section-title">
-        <button className="section-delete-btn" type="button" aria-label="Eliminar bloque de telas" title="Eliminar bloque de telas" onClick={() => onDeleteBlock(block.id)}>
+        <button className="section-delete-btn" type="button" aria-label={t("uiDeleteFabricBlock")} title={t("uiDeleteFabricBlock")} onClick={() => onDeleteBlock(block.id)}>
           <img src={icon("contenedor-de-basura")} alt="" className="icon-trash" aria-hidden="true" />
         </button>
         <EditableText
           className="tab-button editable-title"
           value={block.title}
-          label="Editar nombre del bloque"
+          label={t("uiEditBlockName")}
           onSave={(value) => onRename(block.id, value)}
         />
-        <button className="section-add-btn" type="button" aria-label="Agregar fila de tela" title="Agregar fila de tela" onClick={() => onAddRow(block.id)}>
+        <button className="section-add-btn" type="button" aria-label={t("uiAddFabricRow")} title={t("uiAddFabricRow")} onClick={() => onAddRow(block.id)}>
           <img src={icon("addition")} alt="" className="icon-add" aria-hidden="true" />
         </button>
       </div>
@@ -31,7 +33,7 @@ function FabricBlock({ block, onRow, onAddRow, onDeleteRow, onDeleteBlock, onRen
             <th><EditableText value={labels.rolls} onSave={(value) => onLabel(block.id, "rolls", value)} label="Editar etiqueta" /></th>
             <th><EditableText value={labels.kgPerRoll} onSave={(value) => onLabel(block.id, "kgPerRoll", value)} label="Editar etiqueta" /></th>
             <th><EditableText value={labels.pricePerKg} onSave={(value) => onLabel(block.id, "pricePerKg", value)} label="Editar etiqueta" /></th>
-            <th>ELIMINAR</th>
+            <th>{t("uiDelete")}</th>
           </tr>
         </thead>
         <tbody>
@@ -41,7 +43,7 @@ function FabricBlock({ block, onRow, onAddRow, onDeleteRow, onDeleteBlock, onRen
               <td><input className="cell-input" type="number" min="0" inputMode="decimal" value={inputValue(row.kgPerRoll)} onChange={(event) => onRow(block.id, row.id, "kgPerRoll", event.target.value)} /></td>
               <td><input className="cell-input" type="number" min="0" inputMode="decimal" value={inputValue(row.pricePerKg)} onChange={(event) => onRow(block.id, row.id, "pricePerKg", event.target.value)} /></td>
               <td>
-                <button className="delete-btn" type="button" aria-label="Eliminar fila de tela" onClick={() => onDeleteRow(block.id, row.id)}>
+                <button className="delete-btn" type="button" aria-label={t("uiDeleteFabricRow")} onClick={() => onDeleteRow(block.id, row.id)}>
                   <img src={icon("contenedor-de-basura")} alt="" className="icon-trash" aria-hidden="true" />
                 </button>
               </td>
@@ -57,17 +59,18 @@ function FabricBlock({ block, onRow, onAddRow, onDeleteRow, onDeleteBlock, onRen
         </div>
         <div className="green-box">
           <EditableText className="total-label" value={labels.totalPrice} onSave={(value) => onLabel(block.id, "totalPrice", value)} label="Editar etiqueta" />
-          <span>{formatNumber(totals.totalCost)}</span>
+          <span>{formatCurrency(totals.totalCost, user)}</span>
         </div>
       </div>
     </section>
   );
 }
 
-export function FabricView({ active, actions }) {
+export function FabricView({ active, actions, user }) {
   const fabricPurchase = active.fabricPurchases.find((item) => item.id === active.activeFabricId) || active.fabricPurchases[0];
   const blocks = sanitizeFabricBlocks(fabricPurchase);
   const labels = sanitizeFabricLabels(fabricPurchase?.labels);
+  const t = (key) => getUiText(key, user);
   const totals = calcFabricPurchase(blocks);
 
   return (
@@ -83,11 +86,12 @@ export function FabricView({ active, actions }) {
             onDeleteBlock={actions.deleteFabricBlock}
             onRename={actions.renameFabricBlock}
             onLabel={actions.updateFabricBlockLabel}
+            user={user}
           />
         ))}
 
         <div className="totals-row grand-total-row fabric-grand-total-row">
-          <h3 className="summary-title">RESUMEN GENERAL</h3>
+          <h3 className="summary-title">{t("uiSummary")}</h3>
           <div className="green-box">
             <EditableText className="total-label" value={labels.grandTotalRolls} onSave={(value) => actions.updateFabricPurchaseLabel("grandTotalRolls", value)} label="Editar etiqueta" />
             <span>{formatNumber(totals.totalRolls)}</span>
@@ -98,7 +102,7 @@ export function FabricView({ active, actions }) {
           </div>
           <div className="green-box">
             <EditableText className="total-label" value={labels.grandTotalCost} onSave={(value) => actions.updateFabricPurchaseLabel("grandTotalCost", value)} label="Editar etiqueta" />
-            <span>{formatNumber(totals.totalCost)}</span>
+            <span>{formatCurrency(totals.totalCost, user)}</span>
           </div>
         </div>
       </div>

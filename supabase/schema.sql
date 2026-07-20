@@ -50,6 +50,7 @@ create or replace function public.is_activity_admin()
 returns boolean
 language sql
 stable
+set search_path = ''
 as $$
   select coalesce((auth.jwt() -> 'app_metadata' ->> 'role') = 'admin', false)
     or lower(coalesce(auth.jwt() ->> 'email', '')) = any (array['estereltnia@gmail.com']);
@@ -105,32 +106,30 @@ alter table public.user_activity enable row level security;
 
 drop policy if exists "user_activity_select_own" on public.user_activity;
 drop policy if exists "user_activity_select_admin" on public.user_activity;
+drop policy if exists "user_activity_select_visible" on public.user_activity;
 drop policy if exists "user_activity_insert_own" on public.user_activity;
 drop policy if exists "user_activity_update_own" on public.user_activity;
 
-create policy "user_activity_select_own"
+create policy "user_activity_select_visible"
 on public.user_activity
 for select
 to authenticated
-using (user_id = auth.uid());
-
-create policy "user_activity_select_admin"
-on public.user_activity
-for select
-to authenticated
-using (public.is_activity_admin());
+using (
+  (select auth.uid()) = user_id
+  or (select public.is_activity_admin())
+);
 
 create policy "user_activity_insert_own"
 on public.user_activity
 for insert
 to authenticated
-with check (user_id = auth.uid());
+with check ((select auth.uid()) = user_id);
 
 create policy "user_activity_update_own"
 on public.user_activity
 for update
 to authenticated
-using (user_id = auth.uid())
-with check (user_id = auth.uid());
+using ((select auth.uid()) = user_id)
+with check ((select auth.uid()) = user_id);
 
 alter publication supabase_realtime add table public.user_activity;
