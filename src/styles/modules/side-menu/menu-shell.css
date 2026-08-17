@@ -1,0 +1,214 @@
+﻿/* =========================
+   SIDE MENU
+========================= */
+
+.side-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: min(360px, 85vw); /* No ocupa toda la pantalla en móviles */
+  max-width: 360px;
+  height: 100vh;
+  height: 100dvh; /* Altura dinámica */
+  background: #f8faff;
+  transform: translateX(-100%);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 18px 36px rgba(17, 34, 91, 0.22);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  /* Soporte para notch/isla dinámica */
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.side-menu.open {
+  transform: translateX(0);
+}
+
+/* =========================
+   OVERLAY
+========================= */
+
+.menu-overlay {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.35);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.3s ease,
+    visibility 0.3s ease;
+  z-index: 999;
+  /* Mejor rendimiento */
+  will-change: opacity;
+}
+
+.menu-overlay.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+@supports not (backdrop-filter: blur(3px)) {
+  .menu-overlay {
+    background: rgba(0, 0, 0, 0.5);
+  }
+}
+
+/* =========================
+   MENU HEADER
+========================= */
+
+.menu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: clamp(14px, 3.5vw, 20px) clamp(12px, 3vw, 16px);
+  background: linear-gradient(135deg, #2f48d3, #21367d);
+  border-bottom: 1px solid #21367d;
+  gap: clamp(8px, 2vw, 12px);
+}
+
+.menu-brand {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  min-width: 0;
+  flex-shrink: 1;
+}
+
+.menu-logo {
+  display: block;
+  width: clamp(36px, 9vw, 44px);
+  height: auto;
+  max-height: clamp(32px, 8vw, 40px);
+  flex: 0 0 auto;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+  margin-right: -1px;
+  transform: translateY(1px);
+}
+
+.menu-brand-name {
+  display: inline-block;
+  margin-left: clamp(2px, 0.5vw, 3px);
+  font-family: Georgia, "Times New Roman", serif;
+  color: #fff;
+  font-size: clamp(11px, 2.8vw, 14px);
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  line-height: 1;
+  text-shadow: 0 1px 1px rgba(7, 13, 46, 0.22);
+  transform: translateY(1px);
+  white-space: nowrap;
+}
+
+.menu-header-actions {
+  display: flex;
+  align-items: center;
+  gap: clamp(6px, 1.5vw, 8px);
+  flex-shrink: 0;
+}
+
+.menu-header .close-menu-icon {
+  filter: brightness(0) invert(1);
+}
+
+.close-btn {
+  width: clamp(36px, 9vw, 40px);
+  height: clamp(36px, 9vw, 40px);
+  min-width: 36px;
+  min-height: 36px;
+  border-radius: 50%;
+  background: transparent;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.close-menu-icon {
+  width: clamp(20px, 5vw, 22px);
+  height: clamp(20px, 5vw, 22px);
+  pointer-events: none;
+}
+
+.close-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: scale(1.1);
+}
+
+.close-btn:active {
+  background: rgba(255, 255, 255, 0.25);
+  transform: scale(0.95);
+}
+
+/* =========================
+   SETTINGS TOGGLE BUTTON
+========================= */
+
+.settings-toggle-btn {
+  width: clamp(36px, 9vw, 40px);
+  height: clamp(36px, 9vw, 40px);
+  min-width: 36px;
+  min-height: 36px;
+  border: none;
+  background: transparent;
+  color: #fff;
+  border-radius: 50%;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    background 0.25s ease,
+    transform 0.25s ease;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.settings-toggle-main {
+  display: inline-flex;
+  align-items: center;
+  gap: clamp(8px, 2vw, 10px);
+  min-width: 0;
+}
+
+.settings-inline-icon {
+  width: clamp(18px, 4.5vw, 20px);
+  height: clamp(18px, 4.5vw, 20px);
+  flex: 0 0 auto;
+  display: block;
+  object-fit: contain;
+  filter: contrast(1.08) saturate(1.06);
+  pointer-events: none;
+}
+
+.menu-header .settings-inline-icon {
+  width: clamp(20px, 5vw, 24px);
+  height: clamp(20px, 5vw, 24px);
+  filter: none;
+}
+
+.settings-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.settings-toggle-btn:active {
+  background: rgba(255, 255, 255, 0.25);
+  transform: scale(0.95);
+}
+

@@ -1,0 +1,102 @@
+﻿/* =========================
+   ANIMATIONS
+========================= */
+
+@keyframes slideIn {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Reducir animación si el usuario lo prefiere */
+@media (prefers-reduced-motion: reduce) {
+  .operation-row {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .side-menu {
+    transition: none;
+  }
+}
+
+/* =========================
+   MEDIA QUERIES
+========================= */
+
+/* Móviles */
+@media (max-width: 480px) {
+  .side-menu {
+    width: min(320px, 88vw);
+  }
+
+  .admin-activity-modal-backdrop {
+    padding: 0;
+  }
+
+  .admin-activity-dialog {
+    width: 100%;
+    height: 100dvh;
+    max-height: none;
+    border-radius: 0;
+  }
+
+  .admin-activity-dialog-header {
+    grid-template-columns: minmax(76px, 1fr) auto minmax(76px, 1fr);
+    gap: 8px;
+    padding: 12px 12px 2px;
+  }
+
+  .admin-activity-title-block {
+    min-height: 46px;
+    padding: 14px 8px 10px;
+    text-align: center;
+  }
+
+  .activity-ranking-list {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-activity-dialog-body {
+    padding: 0 12px 18px;
+  }
+
+  .menu-header {
+    padding: clamp(10px, 2.5vw, 14px) clamp(8px, 2vw, 12px);
+  }
+
+  .menu-brand-name {
+    font-size: clamp(10px, 2.5vw, 12px);
+  }
+
+  .settings-layer-content {
+    padding: clamp(10px, 2.5vw, 14px) clamp(8px, 2vw, 12px)
+      clamp(12px, 3vw, 16px);
+  }
+}
+
+/* Móviles muy pequeños */
+@media (max-width: 360px) {
+  .side-menu {
+    width: 92vw;
+  }
+
+  .operation-row {
+    gap: 4px;
+  }
+
+  .op-action {
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+    min-height: 34px;
+  }
+
+  .deleted-operation-row {
+    min-height: 36px;
+    padding: 6px 8px;
+  }
+}
+

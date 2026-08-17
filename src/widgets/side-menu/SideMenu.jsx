@@ -33,8 +33,6 @@ export function SideMenu({
   onLogout,
   actions,
 }) {
-  console.log("USER:", user);
-
   const fabrics = active?.fabricPurchases || [];
   const deletedFabrics = active?.deletedFabricPurchases || [];
 
@@ -520,15 +518,6 @@ export function SideMenu({
             </div>
           </div>
         </div>
-        <AdminActivityDashboard
-          visible={isAdmin && adminActivityOpen}
-          loading={adminActivityLoading}
-          error={adminActivityError}
-          rows={adminActivity}
-          updatedAt={adminActivityUpdatedAt}
-          onClose={() => setAdminActivityOpen(false)}
-          onRefresh={onAdminActivityRefresh}
-        />
         {/* Capa de Eliminados */}
         <div
           id="deleted-layer"
@@ -688,6 +677,15 @@ export function SideMenu({
           </div>
         </div>
       </aside>
+      <AdminActivityDashboard
+        visible={isAdmin && adminActivityOpen}
+        loading={adminActivityLoading}
+        error={adminActivityError}
+        rows={adminActivity}
+        updatedAt={adminActivityUpdatedAt}
+        onClose={() => setAdminActivityOpen(false)}
+        onRefresh={onAdminActivityRefresh}
+      />
     </>
   );
 }

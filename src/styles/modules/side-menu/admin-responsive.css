@@ -1,0 +1,169 @@
+﻿/* =========================
+   ADMIN PANEL - BOTÓN ABRIR
+========================= */
+
+/* =========================
+   ADMIN PANEL - MÓVIL
+========================= */
+
+.admin-panel-item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: clamp(8px, 2vw, 10px);
+  align-items: start;
+  padding: clamp(8px, 2vw, 10px) clamp(10px, 2.5vw, 12px);
+  border: 1px solid #dce5fb;
+  border-radius: clamp(12px, 3vw, 14px);
+  background: linear-gradient(180deg, #fbfcff 0%, #f3f7ff 100%);
+}
+
+.admin-panel-rank {
+  min-width: clamp(28px, 7vw, 32px);
+  height: clamp(28px, 7vw, 32px);
+  border-radius: clamp(8px, 2vw, 10px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #4f64d8;
+  color: #fff;
+  font-size: clamp(10px, 2.5vw, 12px);
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.admin-panel-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.admin-panel-name {
+  color: #1f316f;
+  font-size: clamp(12px, 3vw, 14px);
+  font-weight: 800;
+  word-break: break-word;
+  line-height: 1.2;
+}
+
+.admin-panel-email {
+  color: #61709b;
+  font-size: clamp(10px, 2.5vw, 12px);
+  line-height: 1.4;
+  word-break: break-all; /* ✅ Evita que emails largos desborden */
+  overflow-wrap: break-word;
+}
+
+.admin-panel-meta {
+  color: #3f4f80;
+  font-size: clamp(10px, 2.5vw, 12px);
+  font-weight: 700;
+  line-height: 1.4;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+}
+
+.admin-panel-separator {
+  color: #8895b5;
+  font-weight: 400;
+}
+
+.admin-panel-seen {
+  color: #61709b;
+  font-size: clamp(9px, 2.2vw, 11px);
+  line-height: 1.4;
+  white-space: nowrap;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.admin-panel-updated {
+  display: block;
+  margin-top: clamp(6px, 1.5vw, 8px);
+  text-align: right;
+  font-size: clamp(10px, 2.5vw, 11px);
+  color: #8895b5;
+  font-style: italic;
+}
+
+.admin-panel-empty {
+  margin: 0;
+  font-size: clamp(11px, 2.8vw, 13px);
+  line-height: 1.5;
+  color: #5a6890;
+}
+
+.admin-panel-empty.is-error {
+  color: #bb3e3e;
+}
+
+/* =========================
+   MEDIA QUERIES
+========================= */
+
+/* Móviles: 1 columna para items */
+@media (max-width: 480px) {
+  .admin-panel-header {
+    align-items: center;
+  }
+
+  .admin-panel-item {
+    grid-template-columns: auto 1fr;
+    gap: clamp(6px, 1.5vw, 8px);
+  }
+
+  .activity-ranking-item {
+    grid-template-columns: 1fr;
+  }
+
+  .activity-ranking-item time {
+    text-align: left;
+  }
+
+  /* La fecha "visto" pasa a estar debajo */
+  .admin-panel-seen {
+    grid-column: 1 / -1;
+    text-align: left;
+    white-space: normal;
+    font-size: clamp(9px, 2.2vw, 10px);
+  }
+
+  .admin-panel-rank {
+    min-width: clamp(26px, 6.5vw, 28px);
+    height: clamp(26px, 6.5vw, 28px);
+    font-size: clamp(9px, 2.2vw, 11px);
+    border-radius: 8px;
+  }
+
+  .admin-panel-name {
+    font-size: clamp(11px, 2.8vw, 13px);
+  }
+
+  .admin-panel-email {
+    font-size: clamp(9px, 2.2vw, 11px);
+  }
+
+  .admin-panel-meta {
+    font-size: clamp(9px, 2.2vw, 11px);
+  }
+}
+
+/* Móviles muy pequeños */
+@media (max-width: 360px) {
+  .admin-panel-item {
+    padding: clamp(6px, 1.5vw, 8px);
+    gap: 6px;
+  }
+
+  .admin-panel-meta {
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .admin-panel-separator {
+    display: none; /* Ocultar el punto separador */
+  }
+}
+

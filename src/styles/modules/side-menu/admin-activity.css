@@ -1,0 +1,338 @@
+﻿/* =========================
+   ADMIN PANEL
+========================= */
+
+.admin-panel {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(8px, 2vw, 10px);
+}
+
+.admin-panel-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: clamp(10px, 2vw, 14px);
+}
+
+.admin-panel-header .settings-card-copy {
+  margin: 4px 0 0;
+}
+
+.admin-panel-refresh {
+  flex: 0 0 auto;
+  min-height: 34px;
+  border: 1px solid #bdcbf5;
+  border-radius: 10px;
+  padding: 6px 10px;
+  background: #eef3ff;
+  color: #324baf;
+  font: inherit;
+  font-size: clamp(10px, 2.5vw, 12px);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.admin-panel-refresh:hover:not(:disabled) {
+  background: #dfe9ff;
+}
+
+.admin-panel-refresh:focus-visible {
+  outline: 3px solid rgba(79, 100, 216, 0.28);
+  outline-offset: 2px;
+}
+
+.admin-panel-refresh:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.admin-panel-empty {
+  margin: 0;
+  font-size: clamp(11px, 2.8vw, 13px);
+  line-height: 1.5;
+  color: #5a6890;
+}
+
+.admin-panel-empty.is-error {
+  color: #bb3e3e;
+}
+
+.admin-panel-list {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(8px, 2vw, 10px);
+}
+
+.admin-panel-item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: clamp(8px, 2vw, 10px);
+  align-items: start;
+  padding: clamp(8px, 2vw, 10px) clamp(10px, 2.5vw, 12px);
+  border: 1px solid #dce5fb;
+  border-radius: clamp(12px, 3vw, 14px);
+  background: linear-gradient(180deg, #fbfcff 0%, #f3f7ff 100%);
+}
+
+.admin-panel-rank {
+  min-width: clamp(28px, 7vw, 32px);
+  height: clamp(28px, 7vw, 32px);
+  border-radius: clamp(8px, 2vw, 10px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #4f64d8;
+  color: #fff;
+  font-size: clamp(10px, 2.5vw, 12px);
+  font-weight: 800;
+}
+
+.admin-panel-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.admin-panel-name {
+  color: #1f316f;
+  font-size: clamp(12px, 3vw, 14px);
+  font-weight: 800;
+  word-break: break-word;
+}
+
+.admin-panel-email,
+.admin-panel-meta,
+.admin-panel-seen,
+.admin-panel-updated {
+  color: #61709b;
+  font-size: clamp(10px, 2.5vw, 12px);
+  line-height: 1.4;
+}
+
+.admin-panel-email {
+  word-break: break-word;
+}
+
+.admin-panel-meta {
+  color: #3f4f80;
+  font-weight: 700;
+}
+
+.admin-panel-seen {
+  white-space: nowrap;
+  text-align: right;
+}
+
+.admin-panel-updated {
+  display: block;
+  margin-top: 2px;
+  text-align: right;
+}
+
+.admin-activity-open {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.admin-activity-open-count {
+  font-size: clamp(10px, 2.5vw, 12px);
+  font-weight: 700;
+  opacity: 0.72;
+}
+
+.admin-activity-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 4200;
+  display: block;
+  padding: 0;
+  background: #eef4ff;
+}
+
+.admin-activity-dialog {
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 0;
+  border-top: 3px solid #253b95;
+  border-radius: 0;
+  background:
+    radial-gradient(circle at top left, rgba(154, 181, 245, 0.2), transparent 26%),
+    linear-gradient(180deg, #f7faff 0%, #edf4ff 100%);
+  box-shadow: none;
+}
+
+.admin-activity-dialog-header {
+  display: grid;
+  grid-template-columns: minmax(88px, 1fr) auto minmax(88px, 1fr);
+  align-items: start;
+  gap: clamp(8px, 2vw, 16px);
+  padding: 16px clamp(16px, 2vw, 24px) 2px;
+  border-bottom: 0;
+  background: transparent;
+}
+
+.admin-activity-dialog-header .settings-back-btn {
+  justify-self: start;
+}
+
+.admin-activity-dialog-header .settings-layer-title {
+  font-size: clamp(11px, 1.6vw, 13px);
+  letter-spacing: 0;
+}
+
+.admin-activity-title-block {
+  justify-self: center;
+  display: grid;
+  min-width: 0;
+  min-height: 54px;
+  padding: 18px 8px 12px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.78);
+}
+
+.admin-activity-dialog-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  padding: 0 clamp(16px, 1.8vw, 24px) 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.admin-activity-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: stretch;
+}
+
+.admin-activity-description,
+.activity-ranking-heading p,
+.activity-ranking-empty {
+  margin: 0;
+  color: #61709b;
+  font-size: clamp(11px, 2.8vw, 13px);
+  line-height: 1.5;
+}
+
+.activity-ranking-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  padding: 0;
+}
+
+.activity-ranking-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: min(340px, 100%);
+}
+
+.activity-ranking-heading h3 {
+  margin: 0;
+  color: #061b66;
+  font-size: clamp(14px, 2vw, 16px);
+  line-height: 1.15;
+}
+
+.activity-ranking-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.activity-ranking-count.is-active {
+  background: #d9f7e8;
+  color: #167344;
+}
+
+.activity-ranking-count.is-recent {
+  background: #e5edff;
+  color: #334bb8;
+}
+
+.activity-ranking-count.is-inactive {
+  background: #f1f3f8;
+  color: #6a748d;
+}
+
+.activity-ranking-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.activity-ranking-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px 12px;
+  min-height: 88px;
+  padding: 14px 12px 10px;
+  border: 1px solid #cfddfb;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.activity-ranking-user {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.activity-ranking-name {
+  color: #061b66;
+  font-size: clamp(12px, 3vw, 14px);
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+
+.activity-ranking-email,
+.activity-ranking-metrics,
+.activity-ranking-item time {
+  color: #61709b;
+  font-size: clamp(10px, 2.5vw, 12px);
+  line-height: 1.4;
+}
+
+.activity-ranking-email {
+  overflow-wrap: anywhere;
+}
+
+.activity-ranking-metrics {
+  display: flex;
+  grid-column: 1 / -1;
+  gap: 10px;
+  color: #061b66;
+  font-weight: 700;
+}
+
+.activity-ranking-item time {
+  white-space: nowrap;
+  text-align: right;
+}
+

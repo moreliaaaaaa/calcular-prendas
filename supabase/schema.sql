@@ -52,8 +52,7 @@ language sql
 stable
 set search_path = ''
 as $$
-  select coalesce((auth.jwt() -> 'app_metadata' ->> 'role') = 'admin', false)
-    or lower(coalesce(auth.jwt() ->> 'email', '')) = any (array['estereltnia@gmail.com']);
+  select coalesce((auth.jwt() -> 'app_metadata' ->> 'role') = 'admin', false);
 $$;
 
 create or replace function public.record_user_activity(

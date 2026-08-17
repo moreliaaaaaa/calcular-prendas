@@ -1,0 +1,304 @@
+﻿/* =========================
+   OPERATIONS CONTAINER
+========================= */
+
+.operations-container {
+  padding: clamp(8px, 2vw, 10px) clamp(10px, 2.5vw, 15px);
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+/* =========================
+   DELETED OPERATIONS SECTION
+========================= */
+
+.deleted-operations-section {
+  padding: clamp(10px, 2.5vw, 14px) clamp(10px, 2.5vw, 15px)
+    clamp(6px, 1.5vw, 8px);
+  border-bottom: 1px solid #dbe4fb;
+  background: #f7f9ff;
+}
+
+.deleted-operations-title {
+  display: block;
+  font-size: clamp(10px, 2.5vw, 12px);
+  font-weight: 700;
+  color: #5f6b96;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: clamp(8px, 2vw, 10px);
+}
+
+.deleted-operations-container {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(6px, 1.5vw, 8px);
+}
+
+/* =========================
+   FABRIC PAGES SECTION
+========================= */
+
+.fabric-pages-section {
+  padding: clamp(10px, 2.5vw, 14px) clamp(10px, 2.5vw, 15px)
+    clamp(6px, 1.5vw, 8px);
+  border-bottom: 1px solid #dbe4fb;
+  background: #f7f9ff;
+}
+
+.fabric-pages-section .operations-container {
+  padding: 0;
+  flex: 0 0 auto;
+  max-height: clamp(140px, 35vw, 180px);
+}
+
+.fabric-deleted-section {
+  margin-top: clamp(10px, 2.5vw, 14px);
+  padding-top: clamp(8px, 2vw, 12px);
+  border-top: 1px solid #dbe4fb;
+}
+
+/* =========================
+   MENU VIEW ACTIONS
+========================= */
+
+.menu-view-actions {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(6px, 1.5vw, 8px);
+  padding: clamp(10px, 2.5vw, 14px) clamp(10px, 2.5vw, 15px);
+  border-bottom: 1px solid #dbe4fb;
+  background: #f7f9ff;
+}
+
+.menu-view-btn {
+  width: 100%;
+  border: 1px solid #cfdbfa;
+  background: #fff;
+  color: #21367d;
+  border-radius: clamp(10px, 2.5vw, 12px);
+  padding: clamp(9px, 2.2vw, 11px) clamp(10px, 2.5vw, 12px);
+  font-size: clamp(11px, 2.8vw, 13px);
+  font-weight: 800;
+  text-align: left;
+  cursor: pointer;
+  min-height: 44px;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.menu-view-btn:hover {
+  background: #f5f8ff;
+  border-color: #b0c4f0;
+}
+
+.menu-view-btn:active {
+  background: #eef3ff;
+}
+
+.menu-view-btn.active {
+  background: linear-gradient(135deg, #4f64d8, #304abf);
+  border-color: #304abf;
+  color: #fff;
+}
+
+/* =========================
+   OPERATION ITEMS
+========================= */
+
+.operation-row {
+  display: flex;
+  align-items: center;
+  gap: clamp(6px, 1.5vw, 8px);
+  margin-bottom: clamp(8px, 2vw, 10px);
+  animation: slideIn 0.3s ease forwards;
+  opacity: 0;
+  transform: translateX(-10px);
+}
+
+.operation-item {
+  flex: 1;
+  border: 1px solid #d8e0f5;
+  background: #fff;
+  color: #26345f;
+  border-radius: var(--radius-md);
+  padding: clamp(10px, 2.5vw, 12px) clamp(12px, 3vw, 14px);
+  font-size: clamp(13px, 3.2vw, 15px);
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 44px;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    transform 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.operation-item:hover {
+  border-color: var(--primary);
+  background: #f5f8ff;
+  transform: translateX(2px);
+}
+
+.operation-item:active {
+  background: #eef3ff;
+}
+
+.operation-item.active {
+  background: linear-gradient(135deg, #4a61da, #304abf);
+  border-color: #304abf;
+  color: #fff;
+  box-shadow: 0 6px 14px rgba(63, 81, 181, 0.24);
+}
+
+.operation-item .editable-label {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.operation-item .editable-input {
+  min-height: 22px;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  border: none;
+  width: 100%;
+  font: inherit;
+}
+
+.operation-item.active .editable-input {
+  outline-color: rgba(255, 255, 255, 0.65);
+}
+
+/* =========================
+   OPERATION NAME INPUT
+========================= */
+
+.operation-name-input {
+  flex: 1;
+  min-width: 0;
+  border: 1px solid #7e97eb;
+  background: #fff;
+  color: #26345f;
+  border-radius: var(--radius-md);
+  padding: clamp(10px, 2.5vw, 12px) clamp(12px, 3vw, 14px);
+  font-size: clamp(13px, 3.2vw, 15px);
+  font-weight: 600;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.12);
+  min-height: 44px;
+}
+
+/* =========================
+   OPERATION ACTIONS
+========================= */
+
+.op-action {
+  width: clamp(38px, 9.5vw, 40px);
+  height: clamp(38px, 9.5vw, 40px);
+  min-width: 38px;
+  min-height: 38px;
+  flex: 0 0 auto;
+  border: 1px solid #d9deef;
+  border-radius: var(--radius-md);
+  background: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+  color: #59627f;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.op-action:hover {
+  background: #f5f7ff;
+  border-color: var(--primary);
+}
+
+.op-action:active {
+  transform: scale(0.95);
+}
+
+.op-action.rename:hover {
+  color: #3150cc;
+  background: #eef3ff;
+}
+
+.op-action.restore:hover {
+  color: #2d5fcb;
+  background: #eef4ff;
+  border-color: #9fb5ef;
+}
+
+.op-action.delete:hover {
+  background: #fff1f1;
+  border-color: #ef9a9a;
+}
+
+.op-action img,
+.op-action svg {
+  width: clamp(17px, 4.2vw, 19px);
+  height: clamp(17px, 4.2vw, 19px);
+  display: block;
+  pointer-events: none;
+  object-fit: contain;
+  image-rendering: auto;
+  filter: contrast(1.18) saturate(1.08);
+}
+
+/* =========================
+   DELETED OPERATION ROW
+========================= */
+
+.deleted-operation-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(6px, 1.5vw, 8px);
+  min-height: clamp(38px, 9vw, 44px);
+  padding: clamp(8px, 2vw, 10px);
+  border: 1px solid #d8e0f5;
+  border-radius: var(--radius-md);
+  background: rgba(215, 215, 215, 0.38);
+}
+
+.deleted-operation-name {
+  flex: 1;
+  min-width: 0;
+  color: #6d3531;
+  font-size: clamp(12px, 3vw, 14px);
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.deleted-operation-actions {
+  display: flex;
+  align-items: center;
+  gap: clamp(6px, 1.5vw, 8px);
+  flex-shrink: 0;
+}
+
+.deleted-empty {
+  font-size: clamp(11px, 2.8vw, 13px);
+  color: #6e789e;
+}
+

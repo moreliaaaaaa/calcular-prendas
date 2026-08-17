@@ -1,10 +1,43 @@
 import { serve } from "https://deno.land/std@0.205.0/http/server.ts";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
+const DEFAULT_ALLOWED_ORIGINS = [
+  "http://localhost:5173",
+  "http://127.0.0.1:5173",
+];
+
+function getAllowedOrigins() {
+  const configuredOrigins =
+    Deno.env.get("VALIDATE_AUTH_ALLOWED_ORIGINS")
+      ?.split(",")
+      .map((origin) => origin.trim())
+      .filter(Boolean) || [];
+
+  return new Set([...DEFAULT_ALLOWED_ORIGINS, ...configuredOrigins]);
+}
+
+function getCorsHeaders(request: Request) {
+  const origin = request.headers.get("origin");
+  const headers = {
+    "Vary": "Origin",
+    "Access-Control-Allow-Headers":
+      "authorization, x-client-info, apikey, content-type",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+  };
+
+  if (origin && getAllowedOrigins().has(origin)) {
+    return { ...headers, "Access-Control-Allow-Origin": origin };
+  }
+
+  return headers;
+}
+
+function isAllowedOrigin(request: Request) {
+  const origin = request.headers.get("origin");
+  return !origin || getAllowedOrigins().has(origin);
+}
+
+const jsonHeaders = {
+  "content-type": "application/json",
 };
 
 function validateAuthForm(
@@ -81,14 +114,30 @@ function validateAuthForm(
 }
 
 serve(async (request) => {
+  const corsHeaders = getCorsHeaders(request);
+
   if (request.method === "OPTIONS") {
+    if (!isAllowedOrigin(request)) {
+      return new Response("Origen no permitido.", {
+        status: 403,
+        headers: corsHeaders,
+      });
+    }
+
     return new Response("ok", { headers: corsHeaders });
+  }
+
+  if (!isAllowedOrigin(request)) {
+    return new Response(JSON.stringify({ error: "Origen no permitido." }), {
+      status: 403,
+      headers: { ...corsHeaders, ...jsonHeaders },
+    });
   }
 
   if (request.method !== "POST") {
     return new Response(JSON.stringify({ error: "MÃ©todo no permitido." }), {
       status: 405,
-      headers: { ...corsHeaders, "content-type": "application/json" },
+      headers: { ...corsHeaders, ...jsonHeaders },
     });
   }
 
@@ -101,7 +150,7 @@ serve(async (request) => {
   } catch {
     return new Response(JSON.stringify({ error: "Cuerpo JSON invÃ¡lido." }), {
       status: 400,
-      headers: { ...corsHeaders, "content-type": "application/json" },
+      headers: { ...corsHeaders, ...jsonHeaders },
     });
   }
 
@@ -110,12 +159,12 @@ serve(async (request) => {
   if (error) {
     return new Response(JSON.stringify({ error }), {
       status: 400,
-      headers: { ...corsHeaders, "content-type": "application/json" },
+      headers: { ...corsHeaders, ...jsonHeaders },
     });
   }
 
   return new Response(JSON.stringify({ status: "ok" }), {
     status: 200,
-    headers: { ...corsHeaders, "content-type": "application/json" },
+    headers: { ...corsHeaders, ...jsonHeaders },
   });
 });

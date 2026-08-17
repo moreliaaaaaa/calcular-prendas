@@ -63,7 +63,7 @@ Ese panel:
 Antes de usarlo en Supabase:
 
 - ejecuta `supabase/schema.sql`
-- confirma que la cuenta `estereltnia@gmail.com` esté marcada como admin, o cambia ese correo por el tuyo en el archivo SQL y en `src/config/supabase.js`
+- marca la cuenta admin desde Supabase usando `app_metadata.role = "admin"`; no uses un allowlist por email en el frontend
 
 ## 6. Publicar en Netlify
 

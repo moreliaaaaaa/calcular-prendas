@@ -31,13 +31,18 @@ function formatLastSeen(value) {
 
 function ActivityRanking({ title, description, rows, tone }) {
   return (
-    <section className="activity-ranking-section" aria-labelledby={`activity-${tone}`}>
+    <section
+      className="activity-ranking-section"
+      aria-labelledby={`activity-${tone}`}
+    >
       <div className="activity-ranking-heading">
         <div>
           <h3 id={`activity-${tone}`}>{title}</h3>
           <p>{description}</p>
         </div>
-        <span className={`activity-ranking-count is-${tone}`}>{rows.length}</span>
+        <span className={`activity-ranking-count is-${tone}`}>
+          {rows.length}
+        </span>
       </div>
 
       {rows.length ? (
@@ -48,7 +53,9 @@ function ActivityRanking({ title, description, rows, tone }) {
                 <span className="activity-ranking-name">
                   {row.display_name || row.email || "Sin nombre"}
                 </span>
-                <span className="activity-ranking-email">{row.email || "Sin correo"}</span>
+                <span className="activity-ranking-email">
+                  {row.email || "Sin correo"}
+                </span>
               </div>
               <div className="activity-ranking-metrics">
                 <span>{Number(row.activity_score || 0)} interacciones</span>
@@ -74,94 +81,111 @@ export function AdminActivityDashboard({
   rows,
   updatedAt,
   onClose,
-  onRefresh,
 }) {
   const now = Date.now();
   const activityRows = Array.isArray(rows) ? rows : [];
   const activeRows = activityRows
     .filter((row) => now - toTimestamp(row.last_seen_at) <= ACTIVE_WINDOW_MS)
-    .sort((first, second) => Number(second.activity_score || 0) - Number(first.activity_score || 0));
+    .sort(
+      (first, second) =>
+        Number(second.activity_score || 0) - Number(first.activity_score || 0),
+    );
   const recentRows = activityRows
     .filter((row) => {
       const elapsed = now - toTimestamp(row.last_seen_at);
       return elapsed > ACTIVE_WINDOW_MS && elapsed <= RECENT_WINDOW_MS;
     })
-    .sort((first, second) => toTimestamp(second.last_seen_at) - toTimestamp(first.last_seen_at));
+    .sort(
+      (first, second) =>
+        toTimestamp(second.last_seen_at) - toTimestamp(first.last_seen_at),
+    );
   const inactiveRows = activityRows
     .filter((row) => {
       const elapsed = now - toTimestamp(row.last_seen_at);
       return !toTimestamp(row.last_seen_at) || elapsed > RECENT_WINDOW_MS;
     })
-    .sort((first, second) => toTimestamp(second.last_seen_at) - toTimestamp(first.last_seen_at));
+    .sort(
+      (first, second) =>
+        toTimestamp(second.last_seen_at) - toTimestamp(first.last_seen_at),
+    );
+
+  if (!visible) return null;
 
   return (
     <div
-      id="admin-activity-layer"
-      className={`settings-layer admin-activity-layer ${visible ? "open" : ""}`}
-      aria-hidden={!visible}
+      className="admin-activity-modal-backdrop"
+      onMouseDown={(event) => {
+        if (event.target === event.currentTarget) onClose();
+      }}
     >
-      <div className="settings-layer-header">
-        <button
-          className="settings-back-btn"
-          type="button"
-          aria-label="Volver a configuración"
-          onClick={onClose}
-        >
-          <span>volver</span>
-        </button>
-        <span className="settings-layer-title">Ranking de usuarios</span>
-        <button
-          className="admin-activity-dashboard-refresh"
-          type="button"
-          disabled={loading}
-          onClick={onRefresh}
-        >
-          {loading ? "Actualizando..." : "Actualizar"}
-        </button>
-      </div>
+      <section
+        id="admin-activity-dialog"
+        className="admin-activity-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="admin-activity-title"
+        onMouseDown={(event) => event.stopPropagation()}
+      >
+        <div className="admin-activity-dialog-header">
+          <button
+            className="settings-back-btn"
+            type="button"
+            aria-label="Cerrar ranking de usuarios"
+            onClick={onClose}
+          >
+            <span>volver</span>
+          </button>
 
-      <div className="settings-layer-content admin-activity-content">
-        <p className="admin-activity-description">
-          Activo: últimos 5 min. Reciente: últimas 24 h. Inactivo: más de 24 h.
-        </p>
+          <div className="admin-activity-title-block">
+            <span id="admin-activity-title" className="settings-layer-title">
+              Ranking de usuarios
+            </span>
+          </div>
 
-        {error ? (
-          <p className="admin-panel-empty is-error" role="alert">
-            {error}
-          </p>
-        ) : null}
+          <span className="admin-activity-header-spacer" aria-hidden="true" />
+        </div>
 
-        {loading && !activityRows.length ? (
-          <p className="admin-panel-empty" role="status">
-            Cargando actividad...
-          </p>
-        ) : null}
+        <div className="admin-activity-dialog-body">
+          {error ? (
+            <p className="admin-panel-empty is-error" role="alert">
+              {error}
+            </p>
+          ) : null}
 
-        <ActivityRanking
-          title="Activos ahora"
-          description="Usuarios conectados recientemente"
-          rows={activeRows}
-          tone="active"
-        />
-        <ActivityRanking
-          title="Actividad reciente"
-          description="Usuarios que estuvieron hoy"
-          rows={recentRows}
-          tone="recent"
-        />
-        <ActivityRanking
-          title="Usuarios inactivos"
-          description="No registran actividad desde hace más de un día"
-          rows={inactiveRows}
-          tone="inactive"
-        />
+          {loading && !activityRows.length ? (
+            <p className="admin-panel-empty" role="status">
+              Cargando actividad...
+            </p>
+          ) : null}
 
-        {updatedAt ? (
-          <span className="admin-panel-updated" role="status">
-            Última consulta: {updatedAt}
-          </span>
-        ) : null}
-      </div>
+          <div className="admin-activity-grid">
+            <ActivityRanking
+              title="Activos ahora"
+              description="Usuarios conectados recientemente"
+              rows={activeRows}
+              tone="active"
+            />
+            <ActivityRanking
+              title="Usuarios inactivos"
+              description="No registran actividad desde hace mas de un dia"
+              rows={inactiveRows}
+              tone="inactive"
+            />
+            <ActivityRanking
+              title="Actividad reciente"
+              description="Usuarios que estuvieron hoy"
+              rows={recentRows}
+              tone="recent"
+            />
+          </div>
+
+          {updatedAt ? (
+            <span className="admin-panel-updated" role="status">
+              Ultima consulta: {updatedAt}
+            </span>
+          ) : null}
+        </div>
+      </section>
     </div>
   );
 }
