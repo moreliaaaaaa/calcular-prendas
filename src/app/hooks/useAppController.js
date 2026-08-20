@@ -29,6 +29,7 @@ export function useAppController() {
     authMessage,
     authMessageType,
     authLoading,
+    passwordRecoveryMode,
     requiresAuth,
     displayName,
     isAdmin,
