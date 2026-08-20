@@ -401,14 +401,40 @@ export function storageKey(user) {
   return `${STORAGE_PREFIX}:${storageScope(user)}`;
 }
 
+function safeReadStorage(key) {
+  try {
+    return localStorage.getItem(key);
+  } catch (error) {
+    console.warn("No se pudo leer localStorage:", error);
+    return null;
+  }
+}
+
+function safeParseState(value, key) {
+  if (!value) return null;
+
+  try {
+    return JSON.parse(value);
+  } catch (error) {
+    console.warn(`Estado local corrupto en ${key}; se restaurará el valor inicial.`, error);
+    try {
+      localStorage.removeItem(key);
+    } catch {
+      // Si el navegador bloquea localStorage, seguimos con el estado inicial.
+    }
+    return null;
+  }
+}
+
 export function loadLocalState(user) {
-  const scoped = localStorage.getItem(storageKey(user));
-  if (scoped) return JSON.parse(scoped);
+  const currentKey = storageKey(user);
+  const scoped = safeParseState(safeReadStorage(currentKey), currentKey);
+  if (scoped) return scoped;
 
   if (!user) {
     for (const key of LEGACY_STORAGE_KEYS) {
-      const legacyValue = localStorage.getItem(key);
-      if (legacyValue) return JSON.parse(legacyValue);
+      const legacyValue = safeParseState(safeReadStorage(key), key);
+      if (legacyValue) return legacyValue;
     }
   }
 
@@ -416,10 +442,14 @@ export function loadLocalState(user) {
 }
 
 export function saveLocalState(user, state) {
-  localStorage.setItem(storageKey(user), JSON.stringify(state));
-  if (!legacyStorageCleaned) {
-    LEGACY_STORAGE_KEYS.forEach((key) => localStorage.removeItem(key));
-    legacyStorageCleaned = true;
+  try {
+    localStorage.setItem(storageKey(user), JSON.stringify(state));
+    if (!legacyStorageCleaned) {
+      LEGACY_STORAGE_KEYS.forEach((key) => localStorage.removeItem(key));
+      legacyStorageCleaned = true;
+    }
+  } catch (error) {
+    console.warn("No se pudo guardar el estado local:", error);
   }
 }
 

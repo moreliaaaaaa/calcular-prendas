@@ -7,7 +7,7 @@ import { useAppController } from "@/app/hooks/useAppController.js";
 export default function App() {
   const app = useAppController();
 
-  if (!app.authReady && app.requiresAuth) {
+  if (app.requiresAuth && (!app.authReady || app.passwordRecoveryMode)) {
     return (
       <AuthGate
         visible
@@ -17,6 +17,13 @@ export default function App() {
         onLogin={app.login}
         onSignup={app.signup}
         onRecover={app.recoverPassword}
+        onPasswordUpdate={app.updatePassword}
+        passwordResetMode={app.passwordRecoveryMode}
+        initialCountry={
+          app.user?.user_metadata?.country ||
+          app.user?.user_metadata?.country_code ||
+          "CL"
+        }
         toast={app.toast}
       />
     );

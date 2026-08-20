@@ -1,13 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { COUNTRY_OPTIONS, getUiText } from "@/app/lib/auth.js";
 import { icon } from "@/shared/assets/icons.js";
 import "@/styles/modules/auth.css";
 
-const createEmptyForm = () => ({
+const createEmptyForm = (country = "CL") => ({
   name: "",
   email: "",
   password: "",
-  country: "CL",
+  confirmPassword: "",
+  country,
 });
 
 export function AuthScreen({
@@ -18,11 +19,21 @@ export function AuthScreen({
   onLogin,
   onSignup,
   onRecover,
+  onPasswordUpdate,
+  passwordResetMode = false,
+  initialCountry = "CL",
 }) {
-  const [form, setForm] = useState(createEmptyForm);
+  const [form, setForm] = useState(() => createEmptyForm(initialCountry));
   const [showPassword, setShowPassword] = useState(false);
 
   const t = (key) => getUiText(key, form.country);
+
+  useEffect(() => {
+    setForm((current) => ({
+      ...current,
+      country: initialCountry || "CL",
+    }));
+  }, [initialCountry]);
 
   const updateField = (field, value) => {
     setForm((current) => ({
@@ -32,7 +43,7 @@ export function AuthScreen({
   };
 
   const resetForm = () => {
-    setForm(createEmptyForm());
+    setForm(createEmptyForm(initialCountry));
     setShowPassword(false);
   };
 
@@ -48,8 +59,16 @@ export function AuthScreen({
     onRecover(form, resetForm);
   };
 
+  const handlePasswordUpdate = () => {
+    onPasswordUpdate?.(form, resetForm);
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
+    if (passwordResetMode) {
+      handlePasswordUpdate();
+      return;
+    }
     handleLogin();
   };
 
@@ -76,9 +95,9 @@ return (
       </div>
 
       <div className="auth-heading">
-        <h2>{t("authWelcomeBack")}</h2>
+        <h2>{passwordResetMode ? t("authResetTitle") : t("authWelcomeBack")}</h2>
         <p className="auth-copy">
-          {t("authContinueCopy")}
+          {passwordResetMode ? t("authResetCopy") : t("authContinueCopy")}
         </p>
       </div>
 
@@ -88,6 +107,7 @@ return (
         noValidate
         onSubmit={handleSubmit}
       >
+        {!passwordResetMode && (
         <label className="auth-field">
           <span>{t("authName")}</span>
 
@@ -103,7 +123,9 @@ return (
             }
           />
         </label>
+        )}
 
+        {!passwordResetMode && (
         <label className="auth-field">
           <span>{t("authEmail")}</span>
 
@@ -122,7 +144,9 @@ return (
             }
           />
         </label>
+        )}
 
+        {!passwordResetMode && (
         <label className="auth-field">
           <span>{t("authCountry")}</span>
 
@@ -141,6 +165,7 @@ return (
             ))}
           </select>
         </label>
+        )}
 
         <label className="auth-field">
           <span>{t("authPassword")}</span>
@@ -150,7 +175,7 @@ return (
               id="auth-password"
               name="password"
               type={showPassword ? "text" : "password"}
-              autoComplete="current-password"
+              autoComplete={passwordResetMode ? "new-password" : "current-password"}
               minLength={6}
               maxLength={128}
               spellCheck={false}
@@ -191,6 +216,27 @@ return (
           </div>
         </label>
 
+        {passwordResetMode && (
+          <label className="auth-field">
+            <span>{t("authConfirmPassword")}</span>
+
+            <input
+              id="auth-confirm-password"
+              name="confirmPassword"
+              type={showPassword ? "text" : "password"}
+              autoComplete="new-password"
+              minLength={6}
+              maxLength={128}
+              spellCheck={false}
+              required
+              value={form.confirmPassword}
+              onChange={(event) =>
+                updateField("confirmPassword", event.target.value)
+              }
+            />
+          </label>
+        )}
+
         <p
           id="auth-message"
           className={`auth-message ${
@@ -208,9 +254,10 @@ return (
           type="submit"
           disabled={loading}
         >
-          {t("authLogin")}
+          {passwordResetMode ? t("authResetSubmit") : t("authLogin")}
         </button>
 
+        {!passwordResetMode && (
         <button
           id="recover-password-btn"
           className="auth-recover-btn"
@@ -220,7 +267,10 @@ return (
         >
           {t("authRecover")}
         </button>
+        )}
 
+        {!passwordResetMode && (
+        <>
         <div className="auth-divider">
           <span>{t("authOr")}</span>
         </div>
@@ -238,6 +288,8 @@ return (
             {t("authSignupAction")}
           </button>
         </div>
+        </>
+        )}
       </form>
     </div>
   </div>

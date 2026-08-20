@@ -9,6 +9,9 @@ export function AuthGate({
   onLogin,
   onSignup,
   onRecover,
+  onPasswordUpdate,
+  passwordResetMode,
+  initialCountry,
   toast,
 }) {
   return (
@@ -21,6 +24,9 @@ export function AuthGate({
         onLogin={onLogin}
         onSignup={onSignup}
         onRecover={onRecover}
+        onPasswordUpdate={onPasswordUpdate}
+        passwordResetMode={passwordResetMode}
+        initialCountry={initialCountry}
       />
       <Toast toast={toast} />
     </>

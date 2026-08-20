@@ -42,6 +42,7 @@ const TEXTS = {
     authEmailRequired: "Completa el correo electrónico y la contraseña.",
     authEmailInvalid: "Ingresa un correo electrónico válido.",
     authEmailMax: "El correo electrónico es demasiado largo.",
+    authPasswordRequired: "Escribe tu contraseña.",
     authPasswordMin: "La contraseña debe tener al menos 6 caracteres.",
     authPasswordMax: "La contraseña no puede exceder los 128 caracteres.",
     authPasswordSpaces: "La contraseña no puede contener espacios.",
@@ -49,6 +50,7 @@ const TEXTS = {
     authPasswordLower: "La contraseña debe incluir al menos una letra minúscula.",
     authPasswordNumber: "La contraseña debe incluir al menos un número.",
     authPasswordSpecial: "La contraseña debe incluir al menos un carácter especial (!@#$%, etc.).",
+    authPasswordMismatch: "Las contraseñas no coinciden.",
   },
   pt: {
     authNameRequired: "Escreva seu nome para se cadastrar.",
@@ -61,6 +63,7 @@ const TEXTS = {
     authEmailRequired: "Preencha o e-mail e a senha.",
     authEmailInvalid: "Insira um e-mail válido.",
     authEmailMax: "O e-mail é muito longo.",
+    authPasswordRequired: "Digite sua senha.",
     authPasswordMin: "A senha deve ter pelo menos 6 caracteres.",
     authPasswordMax: "A senha não pode exceder 128 caracteres.",
     authPasswordSpaces: "A senha não pode conter espaços.",
@@ -68,6 +71,7 @@ const TEXTS = {
     authPasswordLower: "A senha deve incluir pelo menos uma letra minúscula.",
     authPasswordNumber: "A senha deve incluir pelo menos um número.",
     authPasswordSpecial: "A senha deve incluir pelo menos um caractere especial (!@#$%, etc.).",
+    authPasswordMismatch: "As senhas não coincidem.",
   },
 };
 
@@ -152,8 +156,32 @@ function hasLowercaseLetter(value: string) {
   });
 }
 
+function validatePasswordRules(
+  password: string,
+  t: (key: keyof typeof TEXTS.es) => string,
+) {
+  if (!password) return t("authPasswordRequired");
+  if (password.length < PASSWORD_MIN_LENGTH) return t("authPasswordMin");
+  if (password.length > PASSWORD_MAX_LENGTH) return t("authPasswordMax");
+  if (/\s/.test(password)) return t("authPasswordSpaces");
+  if (!hasUppercaseLetter(password)) return t("authPasswordUpper");
+  if (!hasLowercaseLetter(password)) return t("authPasswordLower");
+  if (!/[0-9]/.test(password)) return t("authPasswordNumber");
+  if (!/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(password)) {
+    return t("authPasswordSpecial");
+  }
+
+  return "";
+}
+
 function validateAuthForm(
-  form: { name?: string; email?: string; password?: string; country?: string },
+  form: {
+    name?: string;
+    email?: string;
+    password?: string;
+    confirmPassword?: string;
+    country?: string;
+  },
   mode: string,
 ) {
   const email = (form.email || "").trim();
@@ -178,6 +206,13 @@ function validateAuthForm(
     return "";
   }
 
+  if (mode === "reset") {
+    const passwordError = validatePasswordRules(password, t);
+    if (passwordError) return passwordError;
+    if (form.confirmPassword !== password) return t("authPasswordMismatch");
+    return "";
+  }
+
   if (!email || !password) return t("authEmailRequired");
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return t("authEmailInvalid");
   if (email.length > EMAIL_MAX_LENGTH) return t("authEmailMax");
@@ -185,13 +220,8 @@ function validateAuthForm(
   if (password.length > PASSWORD_MAX_LENGTH) return t("authPasswordMax");
 
   if (mode === "signup") {
-    if (/\s/.test(password)) return t("authPasswordSpaces");
-    if (!hasUppercaseLetter(password)) return t("authPasswordUpper");
-    if (!hasLowercaseLetter(password)) return t("authPasswordLower");
-    if (!/[0-9]/.test(password)) return t("authPasswordNumber");
-    if (!/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(password)) {
-      return t("authPasswordSpecial");
-    }
+    const passwordError = validatePasswordRules(password, t);
+    if (passwordError) return passwordError;
   }
 
   return "";

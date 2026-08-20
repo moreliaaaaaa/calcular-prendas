@@ -9,12 +9,32 @@ import {
 import { supabase } from "@/services";
 import { shouldRequireAuth } from "@/shared/lib/store.js";
 
+function hasPasswordRecoveryParams() {
+  if (typeof window === "undefined") return false;
+  const params = new URLSearchParams(window.location.search);
+  return (
+    params.get("reset-password") === "true" ||
+    window.location.hash.includes("type=recovery")
+  );
+}
+
+function clearPasswordRecoveryParams() {
+  if (typeof window === "undefined") return;
+  const url = new URL(window.location.href);
+  url.searchParams.delete("reset-password");
+  url.hash = "";
+  window.history.replaceState({}, "", `${url.pathname}${url.search}`);
+}
+
 export function useAuthController({ showToast }) {
   const [user, setUser] = useState(null);
   const [authReady, setAuthReady] = useState(!supabase || !shouldRequireAuth());
   const [authMessage, setAuthMessage] = useState("");
   const [authMessageType, setAuthMessageType] = useState("");
   const [authLoading, setAuthLoading] = useState(false);
+  const [passwordRecoveryMode, setPasswordRecoveryMode] = useState(
+    hasPasswordRecoveryParams,
+  );
 
   const requiresAuth = Boolean(supabase && shouldRequireAuth());
   const t = useCallback((key, value) => getUiText(key, value || user), [user]);
@@ -51,10 +71,17 @@ export function useAuthController({ showToast }) {
       if (error) console.error("No se pudo leer la sesión de Supabase:", error);
 
       const sessionUser = data.session?.user || null;
+      const isRecovery = hasPasswordRecoveryParams();
       setUser(sessionUser);
       setAuthReady(!requiresAuth || Boolean(sessionUser));
 
-      if (requiresAuth && !sessionUser) {
+      if (isRecovery) {
+        setPasswordRecoveryMode(true);
+        setAuthMessage(getUiText("authResetRequired", sessionUser));
+        setAuthMessageType("");
+      }
+
+      if (requiresAuth && !sessionUser && !isRecovery) {
         setAuthMessage(getUiText("authSessionRequired", sessionUser));
       }
     };
@@ -63,10 +90,16 @@ export function useAuthController({ showToast }) {
 
     if (!supabase) return undefined;
 
-    const { data } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data } = supabase.auth.onAuthStateChange((event, session) => {
       const nextUser = session?.user || null;
       setUser(nextUser);
       setAuthReady(!requiresAuth || Boolean(nextUser));
+
+      if (event === "PASSWORD_RECOVERY") {
+        setPasswordRecoveryMode(true);
+        setAuthMessage(getUiText("authResetRequired", nextUser));
+        setAuthMessageType("");
+      }
 
       if (!nextUser && requiresAuth) {
         setAuthMessage(getUiText("authSessionClosed", nextUser));
@@ -190,6 +223,41 @@ export function useAuthController({ showToast }) {
     setAuthMessageType("success");
   }, [t, validateForm]);
 
+  const updatePassword = useCallback(async (form, clear) => {
+    if (!supabase) return;
+
+    const country = form.country || user?.user_metadata?.country || "CL";
+    const validation = validateAuthForm(form, "reset");
+    if (validation) {
+      setAuthMessage(validation);
+      setAuthMessageType("error");
+      return;
+    }
+
+    setAuthLoading(true);
+    setAuthMessage(t("authResetLoading", country));
+    setAuthMessageType("");
+
+    const { data, error } = await supabase.auth.updateUser({
+      password: form.password,
+    });
+
+    setAuthLoading(false);
+
+    if (error) {
+      setAuthMessage(showAuthError(error, country));
+      setAuthMessageType("error");
+      return;
+    }
+
+    clear?.();
+    clearPasswordRecoveryParams();
+    setPasswordRecoveryMode(false);
+    setUser(data.user || user);
+    setAuthMessage(t("authResetSuccess", country));
+    setAuthMessageType("success");
+  }, [t, user]);
+
   const updateDisplayName = useCallback(
     async (name) => {
       if (!supabase || !user) return;
@@ -227,12 +295,14 @@ export function useAuthController({ showToast }) {
     authMessage,
     authMessageType,
     authLoading,
+    passwordRecoveryMode,
     requiresAuth,
     displayName,
     isAdmin,
     login,
     signup,
     recoverPassword,
+    updatePassword,
     updateDisplayName,
     logout,
   };

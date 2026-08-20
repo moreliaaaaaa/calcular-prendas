@@ -35,6 +35,7 @@ export function useAppController() {
     login,
     signup,
     recoverPassword,
+    updatePassword,
     updateDisplayName,
     logout,
   } = useAuthController({ showToast });
@@ -153,6 +154,7 @@ export function useAppController() {
     authMessage,
     authMessageType,
     authLoading,
+    passwordRecoveryMode,
     state,
     active,
     activeView,
@@ -176,6 +178,7 @@ export function useAppController() {
     login,
     signup,
     recoverPassword,
+    updatePassword,
     addSectionOrBlock,
     createNew,
     updateDisplayName,

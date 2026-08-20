@@ -8,11 +8,14 @@ export function useUserActivityHeartbeat({ authReady, displayName, user }) {
     async ({ activeSeconds = 0, boost = 1 } = {}) => {
       if (!supabase || !user) return;
 
+      const cleanActiveSeconds = Math.min(Math.max(Number(activeSeconds) || 0, 0), 300);
+      const cleanBoost = Math.min(Math.max(Number(boost) || 1, 1), 5);
+
       const { error } = await supabase.rpc("record_user_activity", {
         p_display_name: displayName,
         p_email: user.email || "",
-        p_active_seconds: activeSeconds,
-        p_activity_boost: boost,
+        p_active_seconds: cleanActiveSeconds,
+        p_activity_boost: cleanBoost,
       });
 
       if (error) {

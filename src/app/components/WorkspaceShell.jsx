@@ -37,7 +37,13 @@ export function WorkspaceShell({
   actions,
 }) {
   if (!state || !active) {
-    return <div className="app-container"></div>;
+    return (
+      <div className="app-container">
+        <div className="app-loading" role="status" aria-live="polite">
+          Cargando datos...
+        </div>
+      </div>
+    );
   }
 
   return (

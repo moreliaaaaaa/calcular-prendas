@@ -35,6 +35,7 @@ const UI_TEXTS = {
     authEmail: "Correo electrónico",
     authCountry: "País",
     authPassword: "Contraseña",
+    authConfirmPassword: "Confirmar contraseña",
     authLogin: "Iniciar sesión",
     authSignup: "Registrarse",
     authSignupAction: "Crear cuenta",
@@ -43,6 +44,7 @@ const UI_TEXTS = {
     authOr: "o",
     authPasswordShow: "Mostrar contraseña",
     authPasswordHide: "Ocultar contraseña",
+    authPasswordRequired: "Escribe tu contraseña.",
     authNameRequired: "Escribe tu nombre para registrarte.",
     authNameMin: "El nombre debe tener al menos 2 caracteres.",
     authNameMax: "El nombre no puede exceder los 100 caracteres.",
@@ -59,6 +61,7 @@ const UI_TEXTS = {
     authPasswordLower: "La contraseña debe incluir al menos una letra minúscula.",
     authPasswordNumber: "La contraseña debe incluir al menos un número.",
     authPasswordSpecial: "La contraseña debe incluir al menos un carácter especial (!@#$%, etc.).",
+    authPasswordMismatch: "Las contraseñas no coinciden.",
     authLoginError: "Correo o contraseña incorrectos.",
     authEmailTaken: "Este correo ya está registrado.",
     authEmailConfirm: "Debes confirmar tu correo antes de iniciar sesión.",
@@ -72,6 +75,12 @@ const UI_TEXTS = {
     authSignupSuccessConfirm: "Cuenta creada. Revisa tu correo para confirmar tu registro.",
     authRecoverLoading: "Enviando correo de recuperación...",
     authRecoverSuccess: "Te enviamos un correo para recuperar tu contraseña.",
+    authResetTitle: "Crea una nueva contraseña",
+    authResetCopy: "Escribe una contraseña segura para volver a entrar.",
+    authResetSubmit: "Guardar nueva contraseña",
+    authResetLoading: "Guardando contraseña...",
+    authResetSuccess: "Contraseña actualizada correctamente.",
+    authResetRequired: "Abre el enlace de recuperación desde tu correo para cambiar la contraseña.",
     authSessionRequired: "Inicia sesión o regístrate para acceder a tus datos.",
     authSessionClosed: "La sesión se cerró. Vuelve a iniciar sesión.",
     authNameEmpty: "Escribe un nombre.",
@@ -110,6 +119,7 @@ const UI_TEXTS = {
     authEmail: "E-mail",
     authCountry: "País",
     authPassword: "Senha",
+    authConfirmPassword: "Confirmar senha",
     authLogin: "Entrar",
     authSignup: "Cadastrar-se",
     authSignupAction: "Criar conta",
@@ -118,6 +128,7 @@ const UI_TEXTS = {
     authOr: "ou",
     authPasswordShow: "Mostrar senha",
     authPasswordHide: "Ocultar senha",
+    authPasswordRequired: "Digite sua senha.",
     authNameRequired: "Escreva seu nome para se cadastrar.",
     authNameMin: "O nome deve ter pelo menos 2 caracteres.",
     authNameMax: "O nome não pode exceder 100 caracteres.",
@@ -134,6 +145,7 @@ const UI_TEXTS = {
     authPasswordLower: "A senha deve incluir pelo menos uma letra minúscula.",
     authPasswordNumber: "A senha deve incluir pelo menos um número.",
     authPasswordSpecial: "A senha deve incluir pelo menos um caractere especial (!@#$%, etc.).",
+    authPasswordMismatch: "As senhas não coincidem.",
     authLoginError: "E-mail ou senha incorretos.",
     authEmailTaken: "Este e-mail já está cadastrado.",
     authEmailConfirm: "Você precisa confirmar seu e-mail antes de entrar.",
@@ -147,6 +159,12 @@ const UI_TEXTS = {
     authSignupSuccessConfirm: "Conta criada. Verifique seu e-mail para confirmar o cadastro.",
     authRecoverLoading: "Enviando e-mail de recuperação...",
     authRecoverSuccess: "Enviamos um e-mail para você recuperar sua senha.",
+    authResetTitle: "Crie uma nova senha",
+    authResetCopy: "Digite uma senha segura para entrar novamente.",
+    authResetSubmit: "Salvar nova senha",
+    authResetLoading: "Salvando senha...",
+    authResetSuccess: "Senha atualizada com sucesso.",
+    authResetRequired: "Abra o link de recuperação enviado ao seu e-mail para alterar a senha.",
     authSessionRequired: "Entre ou crie uma conta para acessar seus dados.",
     authSessionClosed: "A sessão foi encerrada. Entre novamente.",
     authNameEmpty: "Informe um nome.",
@@ -239,6 +257,42 @@ function hasLowercaseLetter(value) {
   });
 }
 
+function validatePasswordRules(password, t) {
+  if (!password) {
+    return t("authPasswordRequired", "Escribe tu contraseña.");
+  }
+
+  if (password.length < PASSWORD_MIN_LENGTH) {
+    return t("authPasswordMin", "La contraseña debe tener al menos 6 caracteres.");
+  }
+
+  if (password.length > PASSWORD_MAX_LENGTH) {
+    return t("authPasswordMax", "La contraseña no puede exceder los 128 caracteres.");
+  }
+
+  if (/\s/.test(password)) {
+    return t("authPasswordSpaces", "La contraseña no puede contener espacios.");
+  }
+
+  if (!hasUppercaseLetter(password)) {
+    return t("authPasswordUpper", "La contraseña debe incluir al menos una letra mayúscula.");
+  }
+
+  if (!hasLowercaseLetter(password)) {
+    return t("authPasswordLower", "La contraseña debe incluir al menos una letra minúscula.");
+  }
+
+  if (!/[0-9]/.test(password)) {
+    return t("authPasswordNumber", "La contraseña debe incluir al menos un número.");
+  }
+
+  if (!/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(password)) {
+    return t("authPasswordSpecial", "La contraseña debe incluir al menos un carácter especial (!@#$%, etc.).");
+  }
+
+  return "";
+}
+
 export function validateAuthForm(form, mode) {
   const email = (form.email || "").trim();
   const password = form.password || "";
@@ -288,6 +342,17 @@ export function validateAuthForm(form, mode) {
     return "";
   }
 
+  if (mode === "reset") {
+    const passwordError = validatePasswordRules(password, t);
+    if (passwordError) return passwordError;
+
+    if (form.confirmPassword !== password) {
+      return t("authPasswordMismatch", "Las contraseñas no coinciden.");
+    }
+
+    return "";
+  }
+
   if (!email || !password) {
     return t("authEmailRequired", "Completa el correo electrónico y la contraseña.");
   }
@@ -309,25 +374,8 @@ export function validateAuthForm(form, mode) {
   }
 
   if (mode === "signup") {
-    if (/\s/.test(password)) {
-      return t("authPasswordSpaces", "La contraseña no puede contener espacios.");
-    }
-
-    if (!hasUppercaseLetter(password)) {
-      return t("authPasswordUpper", "La contraseña debe incluir al menos una letra mayúscula.");
-    }
-
-    if (!hasLowercaseLetter(password)) {
-      return t("authPasswordLower", "La contraseña debe incluir al menos una letra minúscula.");
-    }
-
-    if (!/[0-9]/.test(password)) {
-      return t("authPasswordNumber", "La contraseña debe incluir al menos un número.");
-    }
-
-    if (!/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(password)) {
-      return t("authPasswordSpecial", "La contraseña debe incluir al menos un carácter especial (!@#$%, etc.).");
-    }
+    const passwordError = validatePasswordRules(password, t);
+    if (passwordError) return passwordError;
   }
 
   return "";

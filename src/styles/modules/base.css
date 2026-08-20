@@ -212,3 +212,12 @@ ol {
   -webkit-user-select: none;
   user-select: none;
 }
+
+.app-loading {
+  display: grid;
+  min-height: 100dvh;
+  place-items: center;
+  color: var(--text-secondary);
+  font-size: var(--font-sm);
+  font-weight: 700;
+}
