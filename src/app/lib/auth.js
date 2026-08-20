@@ -1,5 +1,11 @@
 import { supabase } from "@/services";
 
+export const DEFAULT_COUNTRY_CODE = "CL";
+const EMAIL_MAX_LENGTH = 254;
+const NAME_MAX_LENGTH = 100;
+const PASSWORD_MIN_LENGTH = 6;
+const PASSWORD_MAX_LENGTH = 128;
+
 export const COUNTRY_OPTIONS = [
   { code: "AR", label: "Argentina", currency: "ARS", language: "es", locale: "es-AR" },
   { code: "BO", label: "Bolivia", currency: "BOB", language: "es", locale: "es-BO" },
@@ -22,14 +28,19 @@ export const COUNTRY_OPTIONS = [
 const UI_TEXTS = {
   es: {
     authWelcome: "Bienvenido",
+    authWelcomeBack: "Bienvenido de nuevo",
     authCopy: "Crea tu cuenta o inicia sesión.",
+    authContinueCopy: "Ingresa a tu cuenta para continuar.",
     authName: "Nombre",
     authEmail: "Correo electrónico",
     authCountry: "País",
     authPassword: "Contraseña",
     authLogin: "Iniciar sesión",
     authSignup: "Registrarse",
+    authSignupAction: "Crear cuenta",
     authRecover: "¿Olvidaste tu contraseña?",
+    authNoAccount: "¿No tienes una cuenta?",
+    authOr: "o",
     authPasswordShow: "Mostrar contraseña",
     authPasswordHide: "Ocultar contraseña",
     authNameRequired: "Escribe tu nombre para registrarte.",
@@ -53,6 +64,20 @@ const UI_TEXTS = {
     authEmailConfirm: "Debes confirmar tu correo antes de iniciar sesión.",
     authPasswordRule: "La contraseña no cumple los requisitos mínimos.",
     authGenericError: "Ocurrió un error. Inténtalo nuevamente.",
+    authRecoverEmailRequired: "Escribe tu correo electrónico para enviarte el enlace.",
+    authLoginLoading: "Iniciando sesión...",
+    authLoginSuccess: "Sesión iniciada correctamente.",
+    authSignupLoading: "Creando cuenta...",
+    authSignupSuccessLoggedIn: "Cuenta creada y sesión iniciada.",
+    authSignupSuccessConfirm: "Cuenta creada. Revisa tu correo para confirmar tu registro.",
+    authRecoverLoading: "Enviando correo de recuperación...",
+    authRecoverSuccess: "Te enviamos un correo para recuperar tu contraseña.",
+    authSessionRequired: "Inicia sesión o regístrate para acceder a tus datos.",
+    authSessionClosed: "La sesión se cerró. Vuelve a iniciar sesión.",
+    authNameEmpty: "Escribe un nombre.",
+    authNameSaveError: "No se pudo guardar el nombre.",
+    authNameSaved: "Nombre actualizado.",
+    authLogoutError: "No se pudo cerrar sesión.",
     uiEditGarmentName: "Editar nombre de la prenda",
     uiDeleteBlock: "Eliminar este bloque",
     uiAddRow: "Agregar fila",
@@ -78,14 +103,19 @@ const UI_TEXTS = {
   },
   pt: {
     authWelcome: "Bem-vindo",
-    authCopy: "Crie sua conta ou faça login.",
+    authWelcomeBack: "Bem-vindo de volta",
+    authCopy: "Crie sua conta ou entre.",
+    authContinueCopy: "Entre na sua conta para continuar.",
     authName: "Nome",
     authEmail: "E-mail",
     authCountry: "País",
     authPassword: "Senha",
     authLogin: "Entrar",
     authSignup: "Cadastrar-se",
+    authSignupAction: "Criar conta",
     authRecover: "Esqueceu sua senha?",
+    authNoAccount: "Ainda não tem uma conta?",
+    authOr: "ou",
     authPasswordShow: "Mostrar senha",
     authPasswordHide: "Ocultar senha",
     authNameRequired: "Escreva seu nome para se cadastrar.",
@@ -106,9 +136,23 @@ const UI_TEXTS = {
     authPasswordSpecial: "A senha deve incluir pelo menos um caractere especial (!@#$%, etc.).",
     authLoginError: "E-mail ou senha incorretos.",
     authEmailTaken: "Este e-mail já está cadastrado.",
-    authEmailConfirm: "Você precisa confirmar seu e-mail antes de fazer login.",
+    authEmailConfirm: "Você precisa confirmar seu e-mail antes de entrar.",
     authPasswordRule: "A senha não atende aos requisitos mínimos.",
     authGenericError: "Ocorreu um erro. Tente novamente.",
+    authRecoverEmailRequired: "Informe seu e-mail para receber o link.",
+    authLoginLoading: "Entrando...",
+    authLoginSuccess: "Sessão iniciada com sucesso.",
+    authSignupLoading: "Criando conta...",
+    authSignupSuccessLoggedIn: "Conta criada e sessão iniciada.",
+    authSignupSuccessConfirm: "Conta criada. Verifique seu e-mail para confirmar o cadastro.",
+    authRecoverLoading: "Enviando e-mail de recuperação...",
+    authRecoverSuccess: "Enviamos um e-mail para você recuperar sua senha.",
+    authSessionRequired: "Entre ou crie uma conta para acessar seus dados.",
+    authSessionClosed: "A sessão foi encerrada. Entre novamente.",
+    authNameEmpty: "Informe um nome.",
+    authNameSaveError: "Não foi possível salvar o nome.",
+    authNameSaved: "Nome atualizado.",
+    authLogoutError: "Não foi possível sair.",
     uiEditGarmentName: "Editar nome da peça",
     uiDeleteBlock: "Excluir este bloco",
     uiAddRow: "Adicionar linha",
@@ -135,9 +179,14 @@ const UI_TEXTS = {
 };
 
 export function getCountryConfig(countryCode) {
-  const normalized = (countryCode || "CL").toUpperCase();
+  const normalized = (countryCode || DEFAULT_COUNTRY_CODE).toUpperCase();
+  const fallback = COUNTRY_OPTIONS.find(
+    (option) => option.code === DEFAULT_COUNTRY_CODE,
+  );
+
   return (
     COUNTRY_OPTIONS.find((option) => option.code === normalized) ||
+    fallback ||
     COUNTRY_OPTIONS[0]
   );
 }
@@ -149,9 +198,45 @@ export function getUiText(key, value = null) {
       : value?.user_metadata?.country ||
         value?.user_metadata?.country_code ||
         value?.country ||
-        "CL";
+        DEFAULT_COUNTRY_CODE;
   const language = getCountryConfig(countryCode).language || "es";
   return UI_TEXTS[language]?.[key] || UI_TEXTS.es[key] || key;
+}
+
+function isCombiningMark(character) {
+  const codePoint = character.codePointAt(0);
+  return codePoint >= 0x0300 && codePoint <= 0x036f;
+}
+
+function isLetter(character) {
+  return character.toLocaleLowerCase() !== character.toLocaleUpperCase();
+}
+
+function isValidNameCharacter(character) {
+  return (
+    character === " " ||
+    character === "'" ||
+    character === "’" ||
+    character === "-" ||
+    isCombiningMark(character) ||
+    isLetter(character)
+  );
+}
+
+function isValidName(name) {
+  return [...name].every(isValidNameCharacter);
+}
+
+function hasUppercaseLetter(value) {
+  return [...value].some((character) => {
+    return isLetter(character) && character === character.toLocaleUpperCase();
+  });
+}
+
+function hasLowercaseLetter(value) {
+  return [...value].some((character) => {
+    return isLetter(character) && character === character.toLocaleLowerCase();
+  });
 }
 
 export function validateAuthForm(form, mode) {
@@ -170,11 +255,11 @@ export function validateAuthForm(form, mode) {
       return t("authNameMin", "El nombre debe tener al menos 2 caracteres.");
     }
 
-    if (name.length > 100) {
+    if (name.length > NAME_MAX_LENGTH) {
       return t("authNameMax", "El nombre no puede exceder los 100 caracteres.");
     }
 
-    if (!/^[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ\s'-]+$/.test(name)) {
+    if (!isValidName(name)) {
       return t("authNamePattern", "El nombre solo puede contener letras, espacios, apóstrofes y guiones.");
     }
 
@@ -189,15 +274,15 @@ export function validateAuthForm(form, mode) {
 
   if (mode === "recover") {
     if (!email) {
-      return "Escribe tu correo electrónico para enviarte el enlace.";
+      return t("authRecoverEmailRequired", "Escribe tu correo electrónico para enviarte el enlace.");
     }
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      return "Ingresa un correo electrónico válido.";
+      return t("authEmailInvalid", "Ingresa un correo electrónico válido.");
     }
 
-    if (email.length > 254) {
-      return "El correo electrónico es demasiado largo.";
+    if (email.length > EMAIL_MAX_LENGTH) {
+      return t("authEmailMax", "El correo electrónico es demasiado largo.");
     }
 
     return "";
@@ -211,15 +296,15 @@ export function validateAuthForm(form, mode) {
     return t("authEmailInvalid", "Ingresa un correo electrónico válido.");
   }
 
-  if (email.length > 254) {
+  if (email.length > EMAIL_MAX_LENGTH) {
     return t("authEmailMax", "El correo electrónico es demasiado largo.");
   }
 
-  if (password.length < 6) {
+  if (password.length < PASSWORD_MIN_LENGTH) {
     return t("authPasswordMin", "La contraseña debe tener al menos 6 caracteres.");
   }
 
-  if (password.length > 128) {
+  if (password.length > PASSWORD_MAX_LENGTH) {
     return t("authPasswordMax", "La contraseña no puede exceder los 128 caracteres.");
   }
 
@@ -228,11 +313,11 @@ export function validateAuthForm(form, mode) {
       return t("authPasswordSpaces", "La contraseña no puede contener espacios.");
     }
 
-    if (!/[A-Z]/.test(password)) {
+    if (!hasUppercaseLetter(password)) {
       return t("authPasswordUpper", "La contraseña debe incluir al menos una letra mayúscula.");
     }
 
-    if (!/[a-z]/.test(password)) {
+    if (!hasLowercaseLetter(password)) {
       return t("authPasswordLower", "La contraseña debe incluir al menos una letra minúscula.");
     }
 
@@ -286,7 +371,7 @@ export async function validateAuthFormServer(form, mode) {
   return "";
 }
 
-export function showAuthError(error, countryCode = "CL") {
+export function showAuthError(error, countryCode = DEFAULT_COUNTRY_CODE) {
   const message = error?.message || "";
   const t = (key, fallback) => getUiText(key, countryCode) || fallback;
 

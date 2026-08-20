@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   getCountryConfig,
+  getUiText,
   showAuthError,
   validateAuthForm,
+  validateAuthFormServer,
 } from "@/app/lib/auth.js";
 import { supabase } from "@/services";
 import { shouldRequireAuth } from "@/shared/lib/store.js";
@@ -15,6 +17,11 @@ export function useAuthController({ showToast }) {
   const [authLoading, setAuthLoading] = useState(false);
 
   const requiresAuth = Boolean(supabase && shouldRequireAuth());
+  const t = useCallback((key, value) => getUiText(key, value || user), [user]);
+
+  const validateForm = useCallback(async (form, mode) => {
+    return validateAuthForm(form, mode) || validateAuthFormServer(form, mode);
+  }, []);
 
   const isAdmin = useMemo(() => {
     return Boolean(user && user?.app_metadata?.role === "admin");
@@ -48,7 +55,7 @@ export function useAuthController({ showToast }) {
       setAuthReady(!requiresAuth || Boolean(sessionUser));
 
       if (requiresAuth && !sessionUser) {
-        setAuthMessage("Inicia sesión o regístrate para acceder a tus datos.");
+        setAuthMessage(getUiText("authSessionRequired", sessionUser));
       }
     };
 
@@ -62,7 +69,7 @@ export function useAuthController({ showToast }) {
       setAuthReady(!requiresAuth || Boolean(nextUser));
 
       if (!nextUser && requiresAuth) {
-        setAuthMessage("La sesión se cerró. Vuelve a iniciar sesión.");
+        setAuthMessage(getUiText("authSessionClosed", nextUser));
       }
     });
 
@@ -72,7 +79,7 @@ export function useAuthController({ showToast }) {
   const login = useCallback(async (form, clear) => {
     if (!supabase) return;
 
-    const validation = validateAuthForm(form, "login");
+    const validation = await validateForm(form, "login");
     if (validation) {
       setAuthMessage(validation);
       setAuthMessageType("error");
@@ -80,7 +87,7 @@ export function useAuthController({ showToast }) {
     }
 
     setAuthLoading(true);
-    setAuthMessage("Iniciando sesión...");
+    setAuthMessage(t("authLoginLoading", form.country));
     setAuthMessageType("");
 
     const { error } = await supabase.auth.signInWithPassword({
@@ -91,20 +98,20 @@ export function useAuthController({ showToast }) {
     setAuthLoading(false);
 
     if (error) {
-      setAuthMessage(showAuthError(error));
+      setAuthMessage(showAuthError(error, form.country));
       setAuthMessageType("error");
       return;
     }
 
     clear();
-    setAuthMessage("Sesion iniciada correctamente.");
+    setAuthMessage(t("authLoginSuccess", form.country));
     setAuthMessageType("success");
-  }, []);
+  }, [t, validateForm]);
 
   const signup = useCallback(async (form, clear) => {
     if (!supabase) return;
 
-    const validation = validateAuthForm(form, "signup");
+    const validation = await validateForm(form, "signup");
     if (validation) {
       setAuthMessage(validation);
       setAuthMessageType("error");
@@ -112,7 +119,7 @@ export function useAuthController({ showToast }) {
     }
 
     setAuthLoading(true);
-    setAuthMessage("Creando cuenta...");
+    setAuthMessage(t("authSignupLoading", form.country));
     setAuthMessageType("");
 
     const countryConfig = getCountryConfig(form.country);
@@ -136,7 +143,7 @@ export function useAuthController({ showToast }) {
     setAuthLoading(false);
 
     if (error) {
-      setAuthMessage(showAuthError(error));
+      setAuthMessage(showAuthError(error, countryConfig.code));
       setAuthMessageType("error");
       return;
     }
@@ -144,16 +151,16 @@ export function useAuthController({ showToast }) {
     clear();
     setAuthMessage(
       data.session?.user
-        ? "Cuenta creada y sesión iniciada."
-        : "Cuenta creada. Revisa tu correo para confirmar tu registro.",
+        ? t("authSignupSuccessLoggedIn", countryConfig.code)
+        : t("authSignupSuccessConfirm", countryConfig.code),
     );
     setAuthMessageType("success");
-  }, []);
+  }, [t, validateForm]);
 
   const recoverPassword = useCallback(async (form, clear) => {
     if (!supabase) return;
 
-    const validation = validateAuthForm(form, "recover");
+    const validation = await validateForm(form, "recover");
     if (validation) {
       setAuthMessage(validation);
       setAuthMessageType("error");
@@ -161,7 +168,7 @@ export function useAuthController({ showToast }) {
     }
 
     setAuthLoading(true);
-    setAuthMessage("Enviando correo de recuperación...");
+    setAuthMessage(t("authRecoverLoading", form.country));
     setAuthMessageType("");
 
     const redirectTo = `${window.location.origin}${window.location.pathname}?reset-password=true`;
@@ -173,15 +180,15 @@ export function useAuthController({ showToast }) {
     setAuthLoading(false);
 
     if (error) {
-      setAuthMessage(showAuthError(error));
+      setAuthMessage(showAuthError(error, form.country));
       setAuthMessageType("error");
       return;
     }
 
     clear?.();
-    setAuthMessage("Te enviamos un correo para recuperar tu contraseña.");
+    setAuthMessage(t("authRecoverSuccess", form.country));
     setAuthMessageType("success");
-  }, []);
+  }, [t, validateForm]);
 
   const updateDisplayName = useCallback(
     async (name) => {
@@ -189,7 +196,7 @@ export function useAuthController({ showToast }) {
 
       const clean = name.trim();
       if (!clean) {
-        showToast("Escribe un nombre", "error");
+        showToast(t("authNameEmpty"), "error");
         return;
       }
 
@@ -198,21 +205,21 @@ export function useAuthController({ showToast }) {
       });
 
       if (error) {
-        showToast("No se pudo guardar el nombre", "error");
+        showToast(t("authNameSaveError"), "error");
         return;
       }
 
       setUser(data.user || user);
-      showToast("Nombre actualizado", "success");
+      showToast(t("authNameSaved"), "success");
     },
-    [showToast, user],
+    [showToast, t, user],
   );
 
   const logout = useCallback(async () => {
     if (!supabase) return;
     const { error } = await supabase.auth.signOut();
-    if (error) showToast("No se pudo cerrar sesión", "error");
-  }, [showToast]);
+    if (error) showToast(t("authLogoutError"), "error");
+  }, [showToast, t]);
 
   return {
     user,

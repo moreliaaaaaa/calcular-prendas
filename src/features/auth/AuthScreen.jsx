@@ -76,9 +76,9 @@ return (
       </div>
 
       <div className="auth-heading">
-        <h2>Bienvenido de nuevo</h2>
+        <h2>{t("authWelcomeBack")}</h2>
         <p className="auth-copy">
-          Ingresa a tu cuenta para continuar
+          {t("authContinueCopy")}
         </p>
       </div>
 
@@ -222,11 +222,11 @@ return (
         </button>
 
         <div className="auth-divider">
-          <span>o</span>
+          <span>{t("authOr")}</span>
         </div>
 
         <div className="auth-signup-section">
-          <p>¿No tienes una cuenta?</p>
+          <p>{t("authNoAccount")}</p>
 
           <button
             id="signup-btn"
@@ -235,7 +235,7 @@ return (
             disabled={loading}
             onClick={handleSignup}
           >
-            Crear cuenta
+            {t("authSignupAction")}
           </button>
         </div>
       </form>
