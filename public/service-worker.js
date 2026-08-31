@@ -52,9 +52,7 @@ self.addEventListener("fetch", (event) => {
     isSameOrigin &&
     (requestPath.endsWith("/index.html") ||
       requestPath.includes("/assets/") ||
-      requestPath.includes("/img/") ||
-      requestPath.includes("/icons/") ||
-      requestPath.includes("/marca/"));
+      requestPath.includes("/icons/"));
 
   const cacheFirst = async () => {
     const cachedResponse = await caches.match(event.request);

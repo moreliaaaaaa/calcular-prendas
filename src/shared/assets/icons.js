@@ -1,1 +1,7 @@
-export const icon = (name) => `/img/${name}.svg`;
+const iconUrls = import.meta.glob("./icons/*.svg", {
+  eager: true,
+  import: "default",
+  query: "?url",
+});
+
+export const icon = (name) => iconUrls[`./icons/${name}.svg`] || "";

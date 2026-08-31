@@ -17,20 +17,20 @@ create policy "shared_states_select_own"
 on public.shared_states
 for select
 to authenticated
-using (id = auth.uid()::text);
+using ((select auth.uid())::text = id);
 
 create policy "shared_states_insert_own"
 on public.shared_states
 for insert
 to authenticated
-with check (id = auth.uid()::text);
+with check ((select auth.uid())::text = id);
 
 create policy "shared_states_update_own"
 on public.shared_states
 for update
 to authenticated
-using (id = auth.uid()::text)
-with check (id = auth.uid()::text);
+using ((select auth.uid())::text = id)
+with check ((select auth.uid())::text = id);
 
 alter publication supabase_realtime add table public.shared_states;
 
@@ -149,6 +149,7 @@ with check ((select auth.uid()) = user_id);
 alter publication supabase_realtime add table public.user_activity;
 
 revoke all on table public.shared_states from anon;
+revoke all on table public.shared_states from authenticated;
 revoke all on table public.user_activity from anon;
 revoke insert, update, delete on table public.user_activity from authenticated;
 grant usage on schema public to authenticated;

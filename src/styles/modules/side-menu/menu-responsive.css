@@ -67,10 +67,6 @@
     padding: clamp(10px, 2.5vw, 14px) clamp(8px, 2vw, 12px);
   }
 
-  .menu-brand-name {
-    font-size: clamp(10px, 2.5vw, 12px);
-  }
-
   .settings-layer-content {
     padding: clamp(10px, 2.5vw, 14px) clamp(8px, 2vw, 12px)
       clamp(12px, 3vw, 16px);

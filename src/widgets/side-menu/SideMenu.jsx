@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect, useCallback } from "react";
+import { logoMoreliaAuth } from "@/shared/assets/brand.js";
 import { icon } from "@/shared/assets/icons.js";
 import { EditableText } from "@/shared/ui/EditableText.jsx";
 import {
@@ -143,18 +144,10 @@ export function SideMenu({
           >
             <img
               className="menu-logo"
-              src="/marca/logo-morelia.svg"
-              width="44"
-              height="40"
+              src={logoMoreliaAuth}
               alt=""
               aria-hidden="true"
             />
-            <span
-              className="menu-brand-name"
-              aria-hidden="true"
-            >
-              ORELIA
-            </span>
           </div>
 
           <div className="menu-header-actions">

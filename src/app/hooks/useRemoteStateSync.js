@@ -3,9 +3,11 @@ import { SUPABASE_CONFIG } from "@/config";
 import { supabase } from "@/services";
 import {
   clone,
-  loadLocalState,
+  loadLocalStateCandidates,
+  mergeStates,
   normalizeState,
   saveLocalState,
+  touchState,
 } from "@/shared/lib/store.js";
 
 export function useRemoteStateSync({ authReady, requiresAuth, user }) {
@@ -70,14 +72,15 @@ export function useRemoteStateSync({ authReady, requiresAuth, user }) {
       if (!supabase || remoteApplyingRef.current) return;
       if (requiresAuth && !user) return;
 
-      const serialized = JSON.stringify(nextState);
+      const normalized = normalizeState(nextState);
+      const serialized = JSON.stringify(normalized);
       if (!force && serialized === lastSerializedRef.current) return;
 
       const { error } = await supabase.from(SUPABASE_CONFIG.table).upsert(
         {
           id: user?.id || "guest",
-          payload: nextState,
-          updated_at: new Date().toISOString(),
+          payload: normalized,
+          updated_at: normalized.updatedAt,
         },
         { onConflict: "id" },
       );
@@ -103,7 +106,7 @@ export function useRemoteStateSync({ authReady, requiresAuth, user }) {
         const base = current || normalizeState(null);
         const draft = clone(base);
         producer(draft);
-        const normalized = normalizeState(draft);
+        const normalized = touchState(normalizeState(draft));
         saveLocalState(user, normalized);
         window.clearTimeout(saveTimerRef.current);
         saveTimerRef.current = window.setTimeout(
@@ -130,7 +133,12 @@ export function useRemoteStateSync({ authReady, requiresAuth, user }) {
     let cancelled = false;
 
     const boot = async () => {
-      let nextState = normalizeState(loadLocalState(user));
+      const localState = loadLocalStateCandidates(user).reduce(
+        (merged, candidate) => mergeStates(merged, candidate),
+        null,
+      );
+      let nextState = localState || normalizeState(null);
+
       saveLocalState(user, nextState);
       if (!cancelled) setState(nextState);
       updateSyncStatus(false);
@@ -141,7 +149,7 @@ export function useRemoteStateSync({ authReady, requiresAuth, user }) {
       const accountId = user?.id || "guest";
       const { data, error } = await supabase
         .from(SUPABASE_CONFIG.table)
-        .select("payload")
+        .select("payload, updated_at")
         .eq("id", accountId)
         .maybeSingle();
 
@@ -158,9 +166,17 @@ export function useRemoteStateSync({ authReady, requiresAuth, user }) {
       }
 
       if (data?.payload) {
-        nextState = normalizeState(data.payload);
+        const remoteState = normalizeState({
+          ...data.payload,
+          updatedAt: data.payload.updatedAt || data.updated_at,
+        });
+        nextState = mergeStates(remoteState, localState);
         saveLocalState(user, nextState);
         setState(nextState);
+
+        if (JSON.stringify(nextState) !== JSON.stringify(remoteState)) {
+          await persistRemote(nextState, true);
+        }
       } else {
         await persistRemote(nextState, true);
       }
@@ -184,15 +200,23 @@ export function useRemoteStateSync({ authReady, requiresAuth, user }) {
               const remoteState = payload.new?.payload;
               if (!remoteState) return;
 
-              const normalized = normalizeState(remoteState);
-              const incoming = JSON.stringify(normalized);
-              if (incoming === lastSerializedRef.current) return;
+              setState((current) => {
+                const normalized = normalizeState(remoteState);
+                const merged = mergeStates(normalized, current);
+                const incoming = JSON.stringify(merged);
+                if (incoming === lastSerializedRef.current) return current;
 
-              remoteApplyingRef.current = true;
-              lastSerializedRef.current = incoming;
-              saveLocalState(user, normalized);
-              setState(normalized);
-              remoteApplyingRef.current = false;
+                remoteApplyingRef.current = true;
+                lastSerializedRef.current = incoming;
+                saveLocalState(user, merged);
+                remoteApplyingRef.current = false;
+
+                if (JSON.stringify(merged) !== JSON.stringify(normalized)) {
+                  void persistRemote(merged, true);
+                }
+
+                return merged;
+              });
             },
           )
           .subscribe();

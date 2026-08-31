@@ -75,6 +75,14 @@ const DEFAULT_FABRIC_PURCHASE = {
 
 let legacyStorageCleaned = false;
 
+function nowIso() {
+  return new Date().toISOString();
+}
+
+function isValidDateString(value) {
+  return typeof value === "string" && !Number.isNaN(Date.parse(value));
+}
+
 export function clone(data) {
   return JSON.parse(JSON.stringify(data));
 }
@@ -372,6 +380,10 @@ export function createOperation(name, data) {
 }
 
 export function normalizeState(rawState) {
+  const updatedAt =
+    isValidDateString(rawState?.updatedAt)
+      ? rawState.updatedAt
+      : nowIso();
   const operations = Array.isArray(rawState?.operations)
     ? rawState.operations.map((operation, index) => sanitizeOperation(operation, index))
     : [];
@@ -383,14 +395,74 @@ export function normalizeState(rawState) {
 
   if (!operations.length) {
     const operation = createOperation(null, DEFAULT_DATA);
-    return { operations: [operation], deletedOperations, activeId: operation.id };
+    return {
+      operations: [operation],
+      deletedOperations,
+      activeId: operation.id,
+      updatedAt,
+    };
   }
 
   const activeId = operations.some((operation) => operation.id === rawState?.activeId)
     ? rawState.activeId
     : operations[0].id;
 
-  return { operations, deletedOperations, activeId };
+  return { operations, deletedOperations, activeId, updatedAt };
+}
+
+export function touchState(state, timestamp = nowIso()) {
+  return {
+    ...state,
+    updatedAt: timestamp,
+  };
+}
+
+function stateTime(state) {
+  const time = Date.parse(state?.updatedAt || "");
+  return Number.isNaN(time) ? 0 : time;
+}
+
+function addMissingOperations(target, source, blockedIds) {
+  source.forEach((operation) => {
+    if (blockedIds.has(operation.id)) return;
+    if (target.some((item) => item.id === operation.id)) return;
+    target.push(operation);
+  });
+}
+
+export function mergeStates(primaryState, secondaryState) {
+  if (!primaryState && !secondaryState) return null;
+  if (!primaryState) return normalizeState(secondaryState);
+  if (!secondaryState) return normalizeState(primaryState);
+
+  const primary = normalizeState(primaryState);
+  const secondary = normalizeState(secondaryState);
+  const preferred = stateTime(secondary) > stateTime(primary) ? secondary : primary;
+  const fallback = preferred === primary ? secondary : primary;
+  const operations = clone(preferred.operations);
+  const deletedOperations = clone(preferred.deletedOperations);
+  const activeIds = new Set(operations.map((operation) => operation.id));
+  const deletedIds = new Set(
+    deletedOperations.map((operation) => operation.id),
+  );
+
+  addMissingOperations(operations, fallback.operations, deletedIds);
+  operations.forEach((operation) => activeIds.add(operation.id));
+  addMissingOperations(deletedOperations, fallback.deletedOperations, activeIds);
+
+  const activeId = operations.some((operation) => operation.id === preferred.activeId)
+    ? preferred.activeId
+    : operations[0]?.id;
+
+  return normalizeState({
+    operations,
+    deletedOperations,
+    activeId,
+    updatedAt:
+      stateTime(preferred) >= stateTime(fallback)
+        ? preferred.updatedAt
+        : fallback.updatedAt,
+  });
 }
 
 export function storageScope(user) {
@@ -439,6 +511,27 @@ export function loadLocalState(user) {
   }
 
   return null;
+}
+
+export function loadLocalStateCandidates(user) {
+  const candidates = [];
+  const seenKeys = new Set();
+  const keys = [storageKey(user)];
+
+  if (user) {
+    keys.push(storageKey(null), ...LEGACY_STORAGE_KEYS);
+  } else {
+    keys.push(...LEGACY_STORAGE_KEYS);
+  }
+
+  keys.forEach((key) => {
+    if (seenKeys.has(key)) return;
+    seenKeys.add(key);
+    const value = safeParseState(safeReadStorage(key), key);
+    if (value) candidates.push(value);
+  });
+
+  return candidates;
 }
 
 export function saveLocalState(user, state) {

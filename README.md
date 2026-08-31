@@ -15,32 +15,51 @@ npm run preview
 ## Estructura
 
 ```text
-src/
-  app/                 Entrada de React, hooks de app y composicion principal.
-    hooks/             Acciones y hooks propios de la aplicacion.
-  features/            Pantallas y componentes por dominio funcional.
-    auth/              Modulo de autenticacion.
-    fabric/            Modulo de compras de telas.
-    garments/          Modulo de calculadora de prendas.
-  config/              Configuracion editable por entorno/proyecto.
-  services/            Integraciones externas, como Supabase.
-  shared/
-    assets/            Helpers de assets publicos.
-    hooks/             Hooks reutilizables sin dominio fuerte.
-    lib/               Logica pura y normalizacion de datos.
-    ui/                Componentes reutilizables sin dominio fuerte.
-  styles/              Estilos globales y modulos CSS.
-  widgets/             Bloques de interfaz compartidos por la app.
-public/                Assets estaticos servidos por Vite.
-supabase/              Scripts SQL y recursos de base de datos.
+proyecto/
+  src/                  Codigo editable de la aplicacion.
+    app/                Entrada, composicion principal, hooks y componentes base.
+      components/       Componentes que conectan partes grandes de la app.
+      hooks/            Hooks de estado, autenticacion, sincronizacion y acciones.
+      lib/              Logica general de la app, como textos y validaciones.
+    features/           Pantallas y modulos por funcionalidad.
+      auth/             Pantalla de inicio de sesion y registro.
+      fabric/           Modulo de compras de telas.
+      garments/         Modulo de calculadora de prendas.
+    widgets/            Bloques grandes compartidos por la interfaz.
+      header/           Encabezado superior.
+      side-menu/        Menu lateral, ajustes y actividad admin.
+    shared/             Recursos reutilizables sin depender de una pantalla.
+      assets/           Logos e iconos usados por componentes React.
+        brand/          Assets de marca, como el logo de Morelia.
+        icons/          Iconos SVG de botones y controles.
+      hooks/            Hooks reutilizables.
+      lib/              Calculos, store local y utilidades puras.
+      ui/               Componentes pequenos reutilizables.
+    services/           Integraciones externas.
+      supabase/         Cliente de Supabase.
+    config/             Configuracion editable del proyecto.
+    styles/             CSS global y modulos por area.
+      modules/          Estilos separados por pantalla o widget.
+
+  public/               Archivos que Vite publica tal cual.
+    icons/              Iconos PWA para instalar la app.
+    manifest.json       Manifest de la app instalable.
+    service-worker.js   Cache y soporte offline.
+
+  supabase/             Migraciones, schema y funciones backend.
+  dist/                 Build generado por Vite. No se edita.
+  node_modules/         Dependencias instaladas. No se edita.
+  index.html            HTML base de Vite.
+  package.json          Scripts y dependencias.
+  vite.config.js        Configuracion de Vite.
 ```
 
-## Criterios de crecimiento
+## Reglas de orden
 
-- Mantener `src/app/App.jsx` como orquestador de estado y pantallas.
-- Crear nuevas carpetas en `src/features/<dominio>` cuando una funcionalidad
-  tenga componentes, hooks y reglas propias.
-- Usar `src/widgets` para piezas grandes de interfaz que cruzan dominios, como
-  el encabezado o el menu lateral.
-- Dejar calculos puros en `src/shared/lib` para poder probarlos sin React.
+- Trabajar la interfaz, componentes, estilos y assets visuales dentro de `src/`.
+- Usar `src/shared/assets/brand` para logos y recursos de marca.
+- Usar `src/shared/assets/icons` para iconos SVG usados en botones o controles.
+- Dejar en `public/` solo archivos que deban publicarse con ruta fija, como
+  `manifest.json`, `service-worker.js` e iconos PWA.
+- No editar `dist/` ni `node_modules/`; se generan automaticamente.
 - Encapsular APIs externas en `src/services` antes de usarlas desde la UI.
