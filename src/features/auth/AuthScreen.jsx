@@ -114,9 +114,9 @@ export function AuthScreen({
         </div>
 
         <div className="auth-heading">
-          <h2>
+         {/* <h2>
             {passwordResetMode ? t("authResetTitle") : t("authWelcomeBack")}
-          </h2>
+          </h2>*/}
           <p className="auth-copy">
             {passwordResetMode ? t("authResetCopy") : t("authContinueCopy")}
           </p>
@@ -260,7 +260,7 @@ export function AuthScreen({
             {submitLabel}
           </button>
 
-          {!passwordResetMode && !isSignupMode && (
+          {/* {!passwordResetMode && !isSignupMode && (
             <button
               id="recover-password-btn"
               className="auth-recover-btn"
@@ -270,13 +270,13 @@ export function AuthScreen({
             >
               {t("authRecover")}
             </button>
-          )}
+          )} */}
 
           {!passwordResetMode && (
             <>
-              <div className="auth-divider">
+              {/*<div className="auth-divider">
                 <span>{t("authOr")}</span>
-              </div>
+              </div>*/}
 
               <div className="auth-signup-section">
                 {!isSignupMode && <p>{t("authNoAccount")}</p>}

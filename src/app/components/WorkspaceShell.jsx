@@ -53,11 +53,9 @@ export function WorkspaceShell({
           activeView={activeView}
           activeTitle={activeTitle}
           displayName={displayName}
-          syncStatus={syncStatus}
           installAvailable={installAvailable}
           onMenu={onMenu}
           onAddSection={onAddSection}
-          onSync={onSync}
           onInstall={onInstall}
           onNew={onNew}
         />
@@ -70,6 +68,7 @@ export function WorkspaceShell({
           activeView={activeView}
           theme={theme}
           user={user}
+          syncStatus={syncStatus}
           displayName={displayName}
           isAdmin={isAdmin}
           adminActivity={adminActivity}
@@ -80,6 +79,7 @@ export function WorkspaceShell({
           onClose={onCloseMenu}
           onSettingsOpen={onSettingsOpen}
           onSettingsClose={onSettingsClose}
+          onSync={onSync}
           onView={onView}
           onThemeToggle={onThemeToggle}
           onDisplayName={onDisplayName}

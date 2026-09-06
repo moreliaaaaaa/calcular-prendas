@@ -66,11 +66,13 @@ export function useAppController() {
 
   const actions = useCalculatorActions({
     active,
+    activeView,
     saveState,
     showToast,
     state,
     setActiveView,
     setMenuOpen,
+    user,
   });
 
   const activeTitle = useMemo(() => {

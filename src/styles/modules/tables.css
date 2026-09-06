@@ -69,7 +69,8 @@
 /* ---------- BOTONES FLOTANTES ---------- */
 
 .section-delete-btn,
-.section-add-btn {
+.section-add-btn,
+.section-money-btn {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -81,7 +82,7 @@
   border-radius: 50%;
   border: none;
   background: rgba(255, 255, 255, 0.15);
-  color: #fffdfd;
+  color: #fbf7f7;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -103,8 +104,27 @@
   right: clamp(4px, 1vw, 7px);
 }
 
+.section-money-btn {
+  /*border: 1px solid rgba(246, 243, 243, 0.9);*/
+  background: rgba(37, 99, 235, 0.24);
+}
+
+.section-money-btn-subtract {
+  left: clamp(43px, 11vw, 50px);
+}
+
+.section-money-btn-add {
+  right: clamp(43px, 11vw, 50px);
+}
+
+.section-money-btn.is-active {
+  background: rgba(255, 255, 255, 0.22);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.32);
+}
+
 .section-delete-btn img,
-.section-add-btn .icon-add {
+.section-add-btn .icon-add,
+.section-money-btn img {
   width: clamp(16px, 4vw, 18px);
   height: clamp(16px, 4vw, 18px);
   filter: brightness(1.18) contrast(1.2) saturate(1.08);
@@ -112,14 +132,16 @@
 }
 
 .section-delete-btn:hover,
-.section-add-btn:hover {
+.section-add-btn:hover,
+.section-money-btn:hover {
   background: rgba(255, 255, 255, 0.25);
   opacity: 0.9;
   transform: translateY(-50%) scale(1.08);
 }
 
 .section-delete-btn:active,
-.section-add-btn:active {
+.section-add-btn:active,
+.section-money-btn:active {
   background: rgba(255, 255, 255, 0.35);
   transform: translateY(-50%) scale(0.94);
 }
@@ -437,6 +459,45 @@ td.price-inherited {
   white-space: nowrap;
 }
 
+.adjustment-box {
+  flex-basis: 100%;
+}
+
+.extra-box {
+  border-color: #2563eb;
+  background: linear-gradient(180deg, #f8fbff, #eaf1ff);
+}
+
+.advance-box {
+  border-color: #2563eb;
+}
+
+.balance-box {
+  border-color: #16a34a;
+  background: linear-gradient(180deg, #f7fff9, #e8f8ee);
+}
+
+.total-input {
+  width: min(46%, 170px);
+  min-width: 96px;
+  min-height: clamp(30px, 7.5vw, 36px);
+  border: 1px solid #487df1;
+  border-radius: var(--radius-md);
+  background: #f9fbff;
+  color: #0d1b6b;
+  font-size: clamp(18px, 5vw, 27px);
+  font-weight: 800;
+  line-height: 1;
+  text-align: right;
+  padding: clamp(4px, 1vw, 6px) clamp(6px, 1.5vw, 8px);
+  box-sizing: border-box;
+}
+
+.total-input:focus-visible {
+  outline: 3px solid rgba(63, 81, 181, 0.18);
+  outline-offset: 2px;
+}
+
 /* =========================
    MEDIA QUERIES
 ========================= */
@@ -451,7 +512,8 @@ td.price-inherited {
   }
 
   .section-delete-btn,
-  .section-add-btn {
+  .section-add-btn,
+  .section-money-btn {
     width: clamp(28px, 7vw, 32px);
     height: clamp(28px, 7vw, 32px);
     min-width: 28px;
@@ -466,14 +528,23 @@ td.price-inherited {
     right: clamp(3px, 0.8vw, 5px);
   }
 
+  .section-money-btn-subtract {
+    left: clamp(40px, 10.5vw, 46px);
+  }
+
+  .section-money-btn-add {
+    right: clamp(40px, 10.5vw, 46px);
+  }
+
   .section-delete-btn img,
-  .section-add-btn .icon-add {
+  .section-add-btn .icon-add,
+  .section-money-btn img {
     width: clamp(14px, 3.5vw, 16px);
     height: clamp(14px, 3.5vw, 16px);
   }
 
   .editable-title {
-    padding: 0 clamp(50px, 14vw, 70px);
+    padding: 0 clamp(82px, 24vw, 106px);
     font-size: 0.88em;
   }
 
@@ -535,6 +606,25 @@ td.price-inherited {
     font-size: clamp(18px, 5vw, 26px);
   }
 
+  .size-section .totals-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .size-section .green-box {
+    width: 100%;
+  }
+
+  .size-section .adjustment-box,
+  .size-section .balance-box {
+    grid-column: 1 / -1;
+  }
+
+  .total-input {
+    width: min(50%, 150px);
+    font-size: clamp(17px, 4.8vw, 24px);
+  }
+
   .totals-row {
     gap: clamp(5px, 1.2vw, 8px);
   }
@@ -549,7 +639,7 @@ td.price-inherited {
   }
 
   .editable-title {
-    padding: 0 clamp(44px, 12vw, 56px);
+    padding: 0 clamp(76px, 23vw, 96px);
     font-size: 0.85em;
   }
 
@@ -603,6 +693,11 @@ td.price-inherited {
   }
 
   .green-box span:last-child {
+    font-size: clamp(16px, 4.5vw, 22px);
+  }
+
+  .total-input {
+    min-width: 84px;
     font-size: clamp(16px, 4.5vw, 22px);
   }
 }

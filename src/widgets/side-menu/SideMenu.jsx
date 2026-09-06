@@ -18,6 +18,7 @@ export function SideMenu({
   activeView,
   theme,
   user,
+  syncStatus,
   displayName,
   isAdmin,
   adminActivity,
@@ -28,6 +29,7 @@ export function SideMenu({
   onClose,
   onSettingsOpen,
   onSettingsClose,
+  onSync,
   onView,
   onThemeToggle,
   onDisplayName,
@@ -151,6 +153,30 @@ export function SideMenu({
           </div>
 
           <div className="menu-header-actions">
+            <button
+              id="sync-now-btn"
+              className="sync-icon-btn"
+              type="button"
+              disabled={!syncStatus.enabled}
+              data-sync-state={syncStatus.state}
+              aria-label={`Sincronizacion: ${syncStatus.status}. ${syncStatus.room}`}
+              title={`${syncStatus.status}. ${syncStatus.room}`}
+              onClick={onSync}
+            >
+              <img
+                className="sync-icon"
+                src={icon("sincronizar-50")}
+                alt=""
+                aria-hidden="true"
+              />
+              <span id="sync-status-text" className="sr-only">
+                {syncStatus.status}
+              </span>
+              <span id="sync-room-text" className="sr-only">
+                {syncStatus.room}
+              </span>
+            </button>
+
             <button
               id="settings-toggle-btn"
               className="settings-toggle-btn"
@@ -296,6 +322,28 @@ export function SideMenu({
           >
             Eliminados
           </button>
+          <div className="menu-export-actions" aria-label="Exportar operacion">
+            <button
+              id="export-pdf-btn"
+              className="menu-export-btn"
+              type="button"
+              disabled={!active}
+              onClick={actions.exportActivePdf}
+            >
+              <span className="menu-export-badge">PDF</span>
+              Exportar
+            </button>
+            <button
+              id="export-csv-btn"
+              className="menu-export-btn"
+              type="button"
+              disabled={!active}
+              onClick={actions.exportActiveCsv}
+            >
+              <span className="menu-export-badge">CSV</span>
+              Exportar
+            </button>
+          </div>
         </div>
 
         {/* Panel de Telas */}

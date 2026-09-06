@@ -8,6 +8,7 @@ export function SideMenuPanel({
   activeView,
   theme,
   user,
+  syncStatus,
   displayName,
   isAdmin,
   adminActivity,
@@ -18,6 +19,7 @@ export function SideMenuPanel({
   onClose,
   onSettingsOpen,
   onSettingsClose,
+  onSync,
   onView,
   onThemeToggle,
   onDisplayName,
@@ -33,6 +35,7 @@ export function SideMenuPanel({
       activeView={activeView}
       theme={theme}
       user={user}
+      syncStatus={syncStatus}
       displayName={displayName}
       isAdmin={isAdmin}
       adminActivity={adminActivity}
@@ -43,6 +46,7 @@ export function SideMenuPanel({
       onClose={onClose}
       onSettingsOpen={onSettingsOpen}
       onSettingsClose={onSettingsClose}
+      onSync={onSync}
       onView={onView}
       onThemeToggle={onThemeToggle}
       onDisplayName={onDisplayName}

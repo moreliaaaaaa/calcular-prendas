@@ -11,6 +11,7 @@ export function EditableText({
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(value || "");
   const inputRef = useRef(null);
+  const lastTouchRef = useRef(0);
 
   useEffect(() => {
     if (!editing) setDraft(value || "");
@@ -36,6 +37,21 @@ export function EditableText({
   const cancel = () => {
     setDraft(value || "");
     setEditing(false);
+  };
+
+  const startEditing = () => {
+    setEditing(true);
+  };
+
+  const handlePointerUp = (event) => {
+    if (event.pointerType !== "touch") return;
+
+    const now = Date.now();
+    if (now - lastTouchRef.current < 350) {
+      event.preventDefault();
+      setEditing(true);
+    }
+    lastTouchRef.current = now;
   };
 
   if (editing) {
@@ -69,11 +85,12 @@ export function EditableText({
       tabIndex="0"
       role="button"
       aria-label={label || "Editar"}
-      onDoubleClick={() => setEditing(true)}
+      onDoubleClick={startEditing}
+      onPointerUp={handlePointerUp}
       onKeyDown={(event) => {
         if (event.key === "Enter") {
           event.preventDefault();
-          setEditing(true);
+          startEditing();
         }
       }}
     >

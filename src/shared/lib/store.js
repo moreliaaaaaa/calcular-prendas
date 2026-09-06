@@ -25,10 +25,16 @@ export const DEFAULT_SECTION_LABELS = {
   qty: "CANTIDAD",
   totalGarments: "TOTAL PRENDAS",
   totalPrice: "PRECIO TOTAL",
+  extra: "EXTRA",
+  advance: "ADELANTO",
+  balance: "SALDO",
 };
 
 export const DEFAULT_OPERATION_LABELS = {
   sumTotal: "SUMA TOTAL",
+  extraTotal: "EXTRAS",
+  advanceTotal: "ADELANTOS",
+  balanceTotal: "SALDO TOTAL",
   totalGarments: "PRENDAS TOTALES",
 };
 
@@ -108,12 +114,27 @@ export function sanitizeSectionLabels(labels = {}) {
       DEFAULT_SECTION_LABELS.totalGarments,
     ),
     totalPrice: sanitizeTitle(labels?.totalPrice, DEFAULT_SECTION_LABELS.totalPrice),
+    extra: sanitizeTitle(labels?.extra, DEFAULT_SECTION_LABELS.extra),
+    advance: sanitizeTitle(labels?.advance, DEFAULT_SECTION_LABELS.advance),
+    balance: sanitizeTitle(labels?.balance, DEFAULT_SECTION_LABELS.balance),
   };
 }
 
 export function sanitizeOperationLabels(labels = {}) {
   return {
     sumTotal: sanitizeTitle(labels?.sumTotal, DEFAULT_OPERATION_LABELS.sumTotal),
+    extraTotal: sanitizeTitle(
+      labels?.extraTotal,
+      DEFAULT_OPERATION_LABELS.extraTotal,
+    ),
+    advanceTotal: sanitizeTitle(
+      labels?.advanceTotal,
+      DEFAULT_OPERATION_LABELS.advanceTotal,
+    ),
+    balanceTotal: sanitizeTitle(
+      labels?.balanceTotal,
+      DEFAULT_OPERATION_LABELS.balanceTotal,
+    ),
     totalGarments: sanitizeTitle(
       labels?.totalGarments,
       DEFAULT_OPERATION_LABELS.totalGarments,
@@ -165,11 +186,15 @@ export function createSection(
   label = DEFAULT_SECTION_TITLES.generic,
   rows = [{ size: "", qty: 0, price: 0, priceManual: false }],
   labels = DEFAULT_SECTION_LABELS,
+  advance = 0,
+  extra = 0,
 ) {
   return {
     id: createId("section"),
     label: sanitizeTitle(label, DEFAULT_SECTION_TITLES.generic),
     labels: sanitizeSectionLabels(labels),
+    advance: toNumber(advance),
+    extra: toNumber(extra),
     rows: sanitizeRows(rows),
   };
 }
@@ -318,6 +343,8 @@ export function sanitizeSections(sections, fallbackSections = null) {
         : createId(`section-${index + 1}`),
     label: sanitizeTitle(section?.label, `${DEFAULT_SECTION_TITLES.generic} ${index + 1}`),
     labels: sanitizeSectionLabels(section?.labels),
+    advance: toNumber(section?.advance),
+    extra: toNumber(section?.extra),
     rows: sanitizeRows(section?.rows),
   }));
 }

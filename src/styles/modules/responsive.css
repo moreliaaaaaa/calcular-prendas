@@ -23,12 +23,12 @@
   /* ---------- HEADER ---------- */
   
   .header {
-    min-height: clamp(56px, 14vw, 68px);
+    min-height: 52px;
     height: auto;
     padding: 
-      clamp(6px, 1.5vw, 10px) 
-      clamp(8px, 2vw, 10px);
-    padding-top: calc(clamp(6px, 1.5vw, 10px) + env(safe-area-inset-top));
+      7px
+      9px;
+    padding-top: calc(7px + env(safe-area-inset-top));
   }
 
   .header-start {
@@ -36,17 +36,17 @@
   }
 
   .header-center {
-    margin: 0 clamp(4px, 1vw, 6px);
-    gap: clamp(1px, 0.3vw, 2px);
+    margin: 0 clamp(2px, 0.9vw, 5px);
+    gap: 1px;
   }
 
   .header-user-name {
-    font-size: clamp(12px, 3.2vw, 14px);
+    font-size: clamp(9px, 2.9vw, 11px);
   }
 
   .active-operation-title {
-    font-size: clamp(8px, 2vw, 10px);
-    letter-spacing: 0.03em;
+    font-size: clamp(9px, 2.9vw, 11px);
+    letter-spacing: 0;
   }
 
   /* Botones del header - área táctil mínima */
@@ -80,10 +80,10 @@
   /* ---------- ADD SECTION BUTTON ---------- */
   
   .action-btn.add-section-btn {
-    min-height: clamp(36px, 9vw, 40px);
+    min-height: 34px;
     height: auto;
-    padding: 0 clamp(12px, 3vw, 14px);
-    font-size: clamp(11px, 2.8vw, 12px);
+    padding: 0 clamp(9px, 2.4vw, 12px);
+    font-size: clamp(10px, 2.55vw, 11px);
     border-radius: clamp(16px, 4vw, 20px);
   }
 
@@ -449,15 +449,15 @@
 
 @media (max-width: 480px) {
   .header {
-    min-height: clamp(52px, 13vw, 60px);
+    min-height: 52px;
   }
 
   .header-user-name {
-    font-size: clamp(11px, 3vw, 13px);
+    font-size: clamp(9px, 2.9vw, 11px);
   }
 
   .active-operation-title {
-    font-size: clamp(7px, 1.8vw, 9px);
+    font-size: clamp(9px, 2.9vw, 11px);
   }
 
   .grand-total-row {
@@ -510,9 +510,9 @@
 
 @media (max-width: 360px) {
   .header {
-    min-height: clamp(48px, 12vw, 54px);
-    padding: clamp(4px, 1vw, 6px) clamp(6px, 1.5vw, 8px);
-    padding-top: calc(clamp(4px, 1vw, 6px) + env(safe-area-inset-top));
+    min-height: 52px;
+    padding: 7px 8px;
+    padding-top: calc(7px + env(safe-area-inset-top));
   }
 
   .header-center {
@@ -521,7 +521,8 @@
   }
 
   .active-operation-title {
-    display: none;
+    display: block;
+    font-size: 9px;
   }
 
   .menu-icon,
@@ -539,8 +540,8 @@
   }
 
   .action-btn.add-section-btn {
-    font-size: 10px;
-    padding: 0 10px;
+    font-size: 9px;
+    padding: 0 8px;
     min-height: 34px;
   }
 

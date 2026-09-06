@@ -62,10 +62,12 @@ export function effectivePrice(row, fallbackPrice) {
   return row.priceManual ? toNumber(row.price) : fallbackPrice;
 }
 
-export function calcSection(rows) {
+export function calcSection(rows, advance = 0, extra = 0) {
   const fallbackPrice = inheritedPrice(rows);
+  const advanceTotal = toNumber(advance);
+  const extraTotal = toNumber(extra);
 
-  return rows.reduce(
+  const totals = rows.reduce(
     (acc, row) => {
       const price = effectivePrice(row, fallbackPrice);
       acc.qty += toNumber(row.qty);
@@ -74,6 +76,13 @@ export function calcSection(rows) {
     },
     { qty: 0, total: 0 },
   );
+
+  return {
+    ...totals,
+    advance: advanceTotal,
+    extra: extraTotal,
+    balance: totals.total + extraTotal - advanceTotal,
+  };
 }
 
 export function calcFabricBlock(block) {

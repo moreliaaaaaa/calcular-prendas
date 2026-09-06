@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { toNumber } from "@/shared/lib/calculations.js";
+import { exportOperationCsv, exportOperationPdf } from "@/shared/lib/exporters.js";
 import {
   DEFAULT_FABRIC_LABELS,
   DEFAULT_OPERATION_LABELS,
@@ -14,11 +15,13 @@ import {
 
 export function useCalculatorActions({
   active,
+  activeView,
   saveState,
   showToast,
   state,
   setActiveView,
   setMenuOpen,
+  user,
 }) {
   return useMemo(() => ({
     selectOperation(operationId) {
@@ -66,6 +69,22 @@ export function useCalculatorActions({
       saveState((draft) => {
         draft.deletedOperations = draft.deletedOperations.filter((item) => item.id !== operationId);
       });
+    },
+    exportActiveCsv() {
+      if (!active) return;
+      exportOperationCsv(active, user, activeView);
+      showToast("CSV exportado", "success");
+    },
+    async exportActivePdf() {
+      if (!active) return;
+      setMenuOpen(false);
+      try {
+        await exportOperationPdf(active, user, activeView);
+        showToast("PDF exportado", "success");
+      } catch (error) {
+        console.error("No se pudo exportar el PDF:", error);
+        showToast("No se pudo exportar el PDF", "error");
+      }
     },
     updateGarmentRow(sectionId, index, field, rawValue) {
       saveState((draft) => {
@@ -134,6 +153,22 @@ export function useCalculatorActions({
         if (!section) return;
         section.labels = sanitizeSectionLabels(section.labels);
         section.labels[key] = value;
+      });
+    },
+    updateSectionAdvance(sectionId, rawValue) {
+      saveState((draft) => {
+        const operation = draft.operations.find((item) => item.id === draft.activeId) || draft.operations[0];
+        const section = operation.sections.find((item) => item.id === sectionId);
+        if (!section) return;
+        section.advance = Math.min(Math.round(toNumber(rawValue) * 100) / 100, 999999999);
+      });
+    },
+    updateSectionExtra(sectionId, rawValue) {
+      saveState((draft) => {
+        const operation = draft.operations.find((item) => item.id === draft.activeId) || draft.operations[0];
+        const section = operation.sections.find((item) => item.id === sectionId);
+        if (!section) return;
+        section.extra = Math.min(Math.round(toNumber(rawValue) * 100) / 100, 999999999);
       });
     },
     updateOperationLabel(key, value) {
@@ -260,5 +295,5 @@ export function useCalculatorActions({
         fabric.labels[key] = value;
       });
     },
-  }), [active, saveState, showToast, state, setActiveView, setMenuOpen]);
+  }), [active, activeView, saveState, showToast, state, setActiveView, setMenuOpen, user]);
 }

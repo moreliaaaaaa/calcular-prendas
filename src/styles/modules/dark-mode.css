@@ -251,6 +251,7 @@ body.dark-mode .settings-back-btn,
 body.dark-mode .settings-card,
 body.dark-mode .account-panel,
 body.dark-mode .menu-view-btn,
+body.dark-mode .menu-export-btn,
 body.dark-mode .deleted-operation-row,
 body.dark-mode .operation-item,
 body.dark-mode .operation-name-input,
@@ -262,6 +263,7 @@ body.dark-mode .op-action {
 
 body.dark-mode .settings-back-btn:hover,
 body.dark-mode .menu-view-btn:hover,
+body.dark-mode .menu-export-btn:hover,
 body.dark-mode .op-action:hover,
 body.dark-mode .operation-item:hover {
   background: #202d54;
@@ -270,6 +272,7 @@ body.dark-mode .operation-item:hover {
 
 body.dark-mode .settings-back-btn:active,
 body.dark-mode .menu-view-btn:active,
+body.dark-mode .menu-export-btn:active,
 body.dark-mode .op-action:active,
 body.dark-mode .operation-item:active {
   background: #253358;
@@ -280,6 +283,11 @@ body.dark-mode .menu-view-btn.active {
   background: linear-gradient(135deg, #4f64d8, #304abf);
   border-color: #6a84ff;
   color: #fff;
+}
+
+body.dark-mode .menu-export-badge {
+  background: #6a84ff;
+  color: #111a32;
 }
 
 /* =========================

@@ -5,11 +5,9 @@ export function Header({
   activeView,
   activeTitle,
   displayName,
-  syncStatus,
   installAvailable,
   onMenu,
   onAddSection,
-  onSync,
   onInstall,
   onNew,
 }) {
@@ -36,21 +34,6 @@ export function Header({
       </div>
 
       <div className="header-actions">
-        <button
-          id="sync-now-btn"
-          className="sync-icon-btn"
-          type="button"
-          disabled={!syncStatus.enabled}
-          data-sync-state={syncStatus.state}
-          aria-label={`Sincronizacion: ${syncStatus.status}. ${syncStatus.room}`}
-          title={`${syncStatus.status}. ${syncStatus.room}`}
-          onClick={onSync}
-        >
-          <img className="sync-icon" src={icon("sincronizar-50")} alt="" aria-hidden="true" />
-          <span id="sync-status-text" className="sr-only">{syncStatus.status}</span>
-          <span id="sync-room-text" className="sr-only">{syncStatus.room}</span>
-        </button>
-
         <button id="install-app-btn" className={`install-icon-btn ${installAvailable ? "" : "hidden"}`} type="button" aria-label="Instalar aplicación" title="Instalar aplicación" onClick={onInstall}>
           <img className="install-icon" src={icon("install")} alt="" aria-hidden="true" />
         </button>

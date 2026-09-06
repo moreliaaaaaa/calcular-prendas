@@ -102,6 +102,18 @@
   filter: brightness(0) invert(1);
 }
 
+.menu-header .sync-icon-btn {
+  width: clamp(36px, 9vw, 40px);
+  height: clamp(36px, 9vw, 40px);
+  min-width: 36px;
+  min-height: 36px;
+  background: transparent;
+}
+
+.menu-header .sync-icon {
+  filter: brightness(0) invert(1);
+}
+
 .close-btn {
   width: clamp(36px, 9vw, 40px);
   height: clamp(36px, 9vw, 40px);
